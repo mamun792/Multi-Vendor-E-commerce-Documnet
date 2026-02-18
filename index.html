@@ -224,6 +224,72 @@ kbd{
   white-space:nowrap;
 }
 
+/* ── Sidebar TOC ── */
+.toc-sidebar{
+  position:fixed;left:-280px;top:calc(var(--topbar-h) + var(--tab-h));
+  width:270px;height:calc(100vh - var(--topbar-h) - var(--tab-h));
+  background:var(--navy-dark);border-right:1px solid var(--navy-border);
+  overflow-y:auto;z-index:88;transition:left .3s ease;
+  padding:20px 0;
+}
+.toc-sidebar.open{left:0}
+.toc-title{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;padding:0 18px 10px;border-bottom:1px solid var(--navy-border);margin-bottom:12px}
+.toc-item{display:block;padding:7px 18px;font-size:13px;color:var(--text-muted);text-decoration:none;transition:all .15s;cursor:pointer;border-left:3px solid transparent}
+.toc-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.toc-item.active{background:rgba(201,168,76,.08);color:var(--gold);border-left-color:var(--gold)}
+.toc-item.h2{padding-left:28px;font-size:12.5px}
+.toc-item.h3{padding-left:38px;font-size:12px}
+
+/* ── Copy button on code ── */
+.code-wrapper{position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;padding:4px 10px;background:var(--navy-light);border:1px solid var(--navy-border);border-radius:4px;color:var(--text-muted);font-size:11px;cursor:pointer;opacity:0;transition:all .2s;z-index:5}
+.code-wrapper:hover .copy-btn{opacity:1}
+.copy-btn:hover{background:var(--gold-dim);color:var(--navy-darkest);border-color:var(--gold)}
+.copy-btn.copied{background:var(--success);color:white;border-color:var(--success)}
+
+/* ── Code language badge ── */
+.code-lang{position:absolute;top:8px;left:8px;padding:2px 8px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);border-radius:3px;color:var(--gold);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;z-index:5}
+
+/* ── Theme toggle ── */
+.theme-toggle{width:36px;height:36px;border-radius:6px;border:1px solid var(--navy-border);background:var(--navy-light);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s}
+.theme-toggle:hover{background:var(--gold-dim);color:var(--navy-darkest);border-color:var(--gold)}
+
+/* ── Quick links floating panel ── */
+.quick-links{position:fixed;right:24px;bottom:80px;background:var(--navy-dark);border:1px solid var(--navy-border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;z-index:85;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.quick-btn{width:42px;height:42px;border-radius:6px;border:1px solid var(--navy-border);background:var(--navy-light);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s;text-decoration:none}
+.quick-btn:hover{background:var(--gold-dim);color:var(--navy-darkest);border-color:var(--gold);transform:translateY(-2px)}
+.quick-btn-label{position:absolute;right:58px;background:var(--navy-darkest);color:var(--text);padding:6px 10px;border-radius:4px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.quick-btn:hover .quick-btn-label{opacity:1}
+
+/* ── Back to top ── */
+.back-top{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--gold-dim);color:var(--navy-darkest);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:22px;z-index:85;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:all .3s}
+.back-top.visible{display:flex}
+.back-top:hover{background:var(--gold);transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.4)}
+
+/* ── TOC toggle button ── */
+.toc-toggle{width:36px;height:36px;border-radius:6px;border:1px solid var(--navy-border);background:var(--navy-light);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s}
+.toc-toggle:hover,.toc-toggle.active{background:var(--gold-dim);color:var(--navy-darkest);border-color:var(--gold)}
+
+/* ── Search result counter ── */
+.search-counter{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text-muted);pointer-events:none}
+
+/* ── Anchor links on headings ── */
+.doc-body h1,.doc-body h2,.doc-body h3{position:relative}
+.anchor-link{position:absolute;left:-20px;opacity:0;color:var(--gold-dim);text-decoration:none;font-size:14px;transition:opacity .2s}
+.doc-body h1:hover .anchor-link,.doc-body h2:hover .anchor-link,.doc-body h3:hover .anchor-link{opacity:1}
+.anchor-link:hover{color:var(--gold)}
+
+/* ── Collapsible sections ── */
+.collapsible-header{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px}
+.collapse-icon{display:inline-block;transition:transform .2s;font-size:12px}
+.collapse-icon.open{transform:rotate(90deg)}
+.collapsible-content{overflow:hidden;transition:max-height .3s ease}
+.collapsible-content.collapsed{max-height:0}
+
+/* ── Light theme ── */
+body.light-theme{background:#f5f5f5;color:#1a1a1a}
+.light-theme{--navy-darkest:#ffffff;--navy-dark:#f8f9fa;--navy:#e9ecef;--navy-light:#dee2e6;--navy-border:#ced4da;--gold:#d4a03a;--gold-light:#e8b84d;--gold-dim:#b8882f;--text:#1a1a1a;--text-muted:#495057;--text-dim:#6c757d;--code-bg:#f8f9fa;--code-border:#dee2e6}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:var(--navy-dark)}
@@ -261,10 +327,18 @@ kbd{
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="Search… (Ctrl+F)" oninput="doSearch(this.value)">
+      <span class="search-counter" id="searchCounter"></span>
     </div>
+    <button class="toc-toggle" id="tocToggle" title="Table of Contents (Ctrl+B)">☰</button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme (Ctrl+T)">🌙</button>
     <div class="topbar-badge">📄 v2.0 &nbsp;|&nbsp; Feb 2026</div>
   </div>
 </div>
+
+<aside class="toc-sidebar" id="tocSidebar">
+  <div class="toc-title">📑 Table of Contents</div>
+  <div id="tocList"></div>
+</aside>
 
 <div class="tab-bar">
 <button class="tab-btn active" onclick="switchTab(0)" id="btn0" title="Software Requirements Specification"><span class="tab-icon">📋</span><span class="tab-text">SRS</span></button>
@@ -38711,59 +38785,304 @@ return [
 </div>
 </div>
 
-<script>
-let curTab = 0;
+<div class="quick-links">
+  <button class="quick-btn" id="copyAllBtn" title="Copy Current URL">
+    <span class="quick-btn-label">Copy Link</span>🔗
+  </button>
+  <button class="quick-btn" id="printBtn" title="Print Document">
+    <span class="quick-btn-label">Print</span>🖨️
+  </button>
+  <button class="quick-btn" id="expandAllBtn" title="Expand All Sections">
+    <span class="quick-btn-label">Expand All</span>📖
+  </button>
+</div>
 
-function switchTab(idx) {
+<button class="back-top" id="backTop" title="Back to Top (Home)">↑</button>
+
+<script>
+(() => {
+'use strict';
+
+let curTab = 0;
+let tocOpen = false;
+let searchMatches = 0;
+
+// ══════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════
+window.switchTab = function(idx) {
   document.querySelectorAll('.tab-panel').forEach((p,i) => p.style.display = i===idx?'block':'none');
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
   curTab = idx;
   document.getElementById('searchInput').value = '';
+  document.getElementById('searchCounter').textContent = '';
   clearSearch();
   window.scrollTo({top: 0, behavior:'smooth'});
-}
+  buildTOC();
+  wrapCodeBlocks();
+  addAnchorLinks();
+};
 
+// ══════════════════════════════════════
+// SEARCH WITH COUNTER
+// ══════════════════════════════════════
 function clearSearch() {
   document.querySelectorAll('.tab-panel mark').forEach(m => {
     const t = document.createTextNode(m.textContent);
     m.parentNode.replaceChild(t, m);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.normalize());
+  searchMatches = 0;
 }
 
 function doSearch(q) {
   clearSearch();
-  if (!q || q.length < 2) return;
+  const counter = document.getElementById('searchCounter');
+  if (!q || q.length < 2) {
+    counter.textContent = '';
+    return;
+  }
   const panel = document.querySelectorAll('.tab-panel')[curTab];
   const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const rx = new RegExp('(' + esc + ')', 'gi');
+  
   panel.querySelectorAll('p, li, td, th, h1, h2, h3, h4, .req-desc').forEach(el => {
     if (!el.children.length || el.tagName === 'TD' || el.tagName === 'TH') {
-      el.innerHTML = el.textContent.replace(rx, '<mark>$1</mark>');
+      const text = el.textContent;
+      const matches = text.match(rx);
+      if (matches) {
+        searchMatches += matches.length;
+        el.innerHTML = text.replace(rx, '<mark>$1</mark>');
+      }
     }
+  });
+  
+  counter.textContent = searchMatches > 0 ? searchMatches + ' found' : 'No results';
+  
+  // Scroll to first match
+  const firstMark = panel.querySelector('mark');
+  if (firstMark) firstMark.scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+
+// ══════════════════════════════════════
+// TABLE OF CONTENTS
+// ══════════════════════════════════════
+function buildTOC() {
+  const tocList = document.getElementById('tocList');
+  tocList.innerHTML = '';
+  const panel = document.querySelectorAll('.tab-panel')[curTab];
+  const headings = panel.querySelectorAll('h1, h2, h3');
+  
+  headings.forEach((h, i) => {
+    if (!h.id) h.id = 'hd-' + curTab + '-' + i;
+    const item = document.createElement('a');
+    item.className = 'toc-item ' + h.tagName.toLowerCase();
+    item.textContent = h.textContent.substring(0, 60) + (h.textContent.length > 60 ? '…' : '');
+    item.href = '#' + h.id;
+    item.onclick = (e) => {
+      e.preventDefault();
+      h.scrollIntoView({behavior: 'smooth', block: 'start'});
+      updateActiveTOC();
+    };
+    tocList.appendChild(item);
   });
 }
 
-// Scroll progress bar
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  document.getElementById('prog').style.width =
-    (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-});
+function updateActiveTOC() {
+  const items = document.querySelectorAll('.toc-item');
+  const panel = document.querySelectorAll('.tab-panel')[curTab];
+  const headings = panel.querySelectorAll('h1, h2, h3');
+  let activeId = '';
+  
+  headings.forEach(h => {
+    if (h.getBoundingClientRect().top < 150) activeId = h.id;
+  });
+  
+  items.forEach(item => {
+    item.classList.toggle('active', item.getAttribute('href') === '#' + activeId);
+  });
+}
 
-// Keyboard shortcut: Ctrl+F focuses search
+// ══════════════════════════════════════
+// CODE BLOCK ENHANCEMENTS
+// ══════════════════════════════════════
+function wrapCodeBlocks() {
+  document.querySelectorAll('.tab-panel')[curTab].querySelectorAll('pre').forEach(pre => {
+    if (pre.parentElement.classList.contains('code-wrapper')) return;
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+    
+    // Add language badge
+    const code = pre.querySelector('code');
+    const lang = code ? code.className.replace('language-','').replace('hljs-custom','').trim() : 'text';
+    if (lang && lang !== 'text') {
+      const badge = document.createElement('span');
+      badge.className = 'code-lang';
+      badge.textContent = lang;
+      wrapper.appendChild(badge);
+    }
+    
+    // Add copy button
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = async () => {
+      const text = code ? code.textContent : pre.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      } catch (e) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }
+    };
+    wrapper.appendChild(btn);
+  });
+}
+
+// ══════════════════════════════════════
+// ANCHOR LINKS ON HEADINGS
+// ══════════════════════════════════════
+function addAnchorLinks() {
+  document.querySelectorAll('.tab-panel')[curTab].querySelectorAll('h1, h2, h3').forEach((h, i) => {
+    if (h.querySelector('.anchor-link')) return;
+    if (!h.id) h.id = 'hd-' + curTab + '-' + i;
+    const link = document.createElement('a');
+    link.className = 'anchor-link';
+    link.href = '#' + h.id;
+    link.textContent = '#';
+    link.title = 'Link to this section';
+    link.onclick = (e) => {
+      e.preventDefault();
+      history.pushState(null, '', '#' + h.id);
+      h.scrollIntoView({behavior: 'smooth'});
+    };
+    h.insertBefore(link, h.firstChild);
+  });
+}
+
+// ══════════════════════════════════════
+// TOC TOGGLE
+// ══════════════════════════════════════
+document.getElementById('tocToggle').onclick = () => {
+  tocOpen = !tocOpen;
+  document.getElementById('tocSidebar').classList.toggle('open', tocOpen);
+  document.getElementById('tocToggle').classList.toggle('active', tocOpen);
+};
+
+// ══════════════════════════════════════
+// THEME TOGGLE
+// ══════════════════════════════════════
+let lightTheme = localStorage.getItem('theme') === 'light';
+function toggleTheme() {
+  lightTheme = !lightTheme;
+  document.body.classList.toggle('light-theme', lightTheme);
+  document.getElementById('themeToggle').textContent = lightTheme ? '☀️' : '🌙';
+  localStorage.setItem('theme', lightTheme ? 'light' : 'dark');
+}
+document.getElementById('themeToggle').onclick = toggleTheme;
+if (lightTheme) toggleTheme();
+
+// ══════════════════════════════════════
+// QUICK ACTIONS
+// ══════════════════════════════════════
+document.getElementById('copyAllBtn').onclick = () => {
+  navigator.clipboard.writeText(window.location.href);
+  alert('📋 Link copied to clipboard!');
+};
+
+document.getElementById('printBtn').onclick = () => window.print();
+
+document.getElementById('expandAllBtn').onclick = () => {
+  document.querySelectorAll('.collapsible-content').forEach(c => {
+    c.classList.remove('collapsed');
+    c.style.maxHeight = c.scrollHeight + 'px';
+  });
+  document.querySelectorAll('.collapse-icon').forEach(i => i.classList.add('open'));
+};
+
+// ══════════════════════════════════════
+// BACK TO TOP
+// ══════════════════════════════════════
+const backTop = document.getElementById('backTop');
+backTop.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+
+// ══════════════════════════════════════
+// SCROLL EVENTS
+// ══════════════════════════════════════
+let scrollTick = false;
+window.addEventListener('scroll', () => {
+  if (!scrollTick) {
+    requestAnimationFrame(() => {
+      const h = document.documentElement;
+      const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+      document.getElementById('prog').style.width = scrolled + '%';
+      backTop.classList.toggle('visible', h.scrollTop > 300);
+      updateActiveTOC();
+      scrollTick = false;
+    });
+    scrollTick = true;
+  }
+}, {passive: true});
+
+// ══════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ══════════════════════════════════════
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey||e.metaKey) && e.key==='f') {
+  // Ctrl/Cmd+F → Focus search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
     e.preventDefault();
     document.getElementById('searchInput').focus();
   }
+  // Ctrl/Cmd+B → Toggle TOC
+  if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+    e.preventDefault();
+    document.getElementById('tocToggle').click();
+  }
+  // Ctrl/Cmd+T → Toggle theme
+  if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+    e.preventDefault();
+    toggleTheme();
+  }
+  // Home → Back to top
+  if (e.key === 'Home' && !e.target.matches('input, textarea')) {
+    e.preventDefault();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  // Escape → Close TOC
+  if (e.key === 'Escape' && tocOpen) {
+    document.getElementById('tocToggle').click();
+  }
 });
 
-// Highlight.js simple manual PHP/SQL/JS
+// ══════════════════════════════════════
+// SYNTAX HIGHLIGHTING
+// ══════════════════════════════════════
 function highlightCode() {
   document.querySelectorAll('pre code').forEach(block => {
     let text = block.innerHTML;
     const lang = block.className.replace('language-','').replace(' hljs-custom','').trim();
+    
     if (lang==='php' || lang==='javascript') {
       text = text
         .replace(/\b(function|class|return|new|if|else|foreach|for|while|do|switch|case|break|continue|public|private|protected|static|abstract|interface|extends|implements|namespace|use|const|let|var|this|echo|isset|empty|array|null|true|false|throw|try|catch|finally)\b/g, '<span class="hljs-keyword">$1</span>')
@@ -38781,10 +39100,22 @@ function highlightCode() {
         .replace(/(#[^\n]*)/g, '<span class="hljs-comment">$1</span>')
         .replace(/(&#39;[^&#]*&#39;|&quot;[^&]*&quot;)/g, '<span class="hljs-string">$1</span>');
     }
+    
     block.innerHTML = text;
   });
 }
-document.addEventListener('DOMContentLoaded', highlightCode);
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  highlightCode();
+  buildTOC();
+  wrapCodeBlocks();
+  addAnchorLinks();
+});
+
+})();
 </script>
 </body>
 </html>
