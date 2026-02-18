@@ -754,6 +754,7 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
 <button class="tab-btn " onclick="switchTab(10)" id="btn10" title="Admin Panel UI/UX Specification"><span class="tab-icon">🖥️</span><span class="tab-text">Admin UI/UX</span></button>
 <button class="tab-btn " onclick="switchTab(11)" id="btn11" title="Vendor Dashboard Specification"><span class="tab-icon">🏪</span><span class="tab-text">Vendor Dashboard</span></button>
 <button class="tab-btn " onclick="switchTab(12)" id="btn12" title="API Documentation — Common Functionalities"><span class="tab-icon">🔌</span><span class="tab-text">API Docs</span></button>
+<button class="tab-btn " onclick="switchTab(13)" id="btn13" title="Complete Project File & Directory Structure"><span class="tab-icon">📁</span><span class="tab-text">File Structure</span></button>
 </div>
 
 <div class="main">
@@ -2896,6 +2897,742 @@ DEPLOYMENT FLOW:
 </code></pre></div>
 
 <div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h3>Complete Project File Structure</h3>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MULTI-VENDOR E-COMMERCE PLATFORM                      │
+│                       COMPLETE FILE STRUCTURE                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ecommerce-platform/
+│
+├── backend/                                    # Laravel Backend API
+│   ├── app/
+│   │   ├── Console/
+│   │   │   ├── Commands/
+│   │   │   │   ├── ProcessPendingPayouts.php
+│   │   │   │   ├── SendAbandonedCartReminders.php
+│   │   │   │   ├── UpdateProductSearchIndex.php
+│   │   │   │   ├── GenerateDailyReports.php
+│   │   │   │   └── CleanExpiredSessions.php
+│   │   │   └── Kernel.php                     # Task scheduler
+│   │   │
+│   │   ├── Events/
+│   │   │   ├── Order/
+│   │   │   │   ├── OrderPlaced.php
+│   │   │   │   ├── OrderShipped.php
+│   │   │   │   ├── OrderDelivered.php
+│   │   │   │   ├── OrderCancelled.php
+│   │   │   │   └── OrderRefunded.php
+│   │   │   ├── Payment/
+│   │   │   │   ├── PaymentReceived.php
+│   │   │   │   ├── PaymentFailed.php
+│   │   │   │   └── RefundProcessed.php
+│   │   │   ├── Product/
+│   │   │   │   ├── ProductCreated.php
+│   │   │   │   ├── ProductUpdated.php
+│   │   │   │   ├── ProductApproved.php
+│   │   │   │   └── ProductLowStock.php
+│   │   │   ├── Vendor/
+│   │   │   │   ├── VendorRegistered.php
+│   │   │   │   ├── VendorApproved.php
+│   │   │   │   └── PayoutRequested.php
+│   │   │   └── User/
+│   │   │       ├── UserRegistered.php
+│   │   │       ├── UserVerified.php
+│   │   │       └── PasswordChanged.php
+│   │   │
+│   │   ├── Exceptions/
+│   │   │   ├── Handler.php                    # Global exception handler
+│   │   │   ├── InsufficientStockException.php
+│   │   │   ├── PaymentFailedException.php
+│   │   │   ├── InvalidCouponException.php
+│   │   │   └── UnauthorizedAccessException.php
+│   │   │
+│   │   ├── Http/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── API/
+│   │   │   │   │   ├── V1/
+│   │   │   │   │   │   ├── Auth/
+│   │   │   │   │   │   │   ├── LoginController.php
+│   │   │   │   │   │   │   ├── RegisterController.php
+│   │   │   │   │   │   │   ├── LogoutController.php
+│   │   │   │   │   │   │   ├── ForgotPasswordController.php
+│   │   │   │   │   │   │   └── ResetPasswordController.php
+│   │   │   │   │   │   │
+│   │   │   │   │   │   ├── Customer/
+│   │   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   │   ├── CategoryController.php
+│   │   │   │   │   │   │   ├── CartController.php
+│   │   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   │   ├── WishlistController.php
+│   │   │   │   │   │   │   ├── ReviewController.php
+│   │   │   │   │   │   │   ├── AddressController.php
+│   │   │   │   │   │   │   └── ProfileController.php
+│   │   │   │   │   │   │
+│   │   │   │   │   │   ├── Vendor/
+│   │   │   │   │   │   │   ├── DashboardController.php
+│   │   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   │   ├── PayoutController.php
+│   │   │   │   │   │   │   ├── SettingsController.php
+│   │   │   │   │   │   │   └── ReportController.php
+│   │   │   │   │   │   │
+│   │   │   │   │   │   ├── Admin/
+│   │   │   │   │   │   │   ├── DashboardController.php
+│   │   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   │   ├── CustomerController.php
+│   │   │   │   │   │   │   ├── VendorController.php
+│   │   │   │   │   │   │   ├── CategoryController.php
+│   │   │   │   │   │   │   ├── ReviewController.php
+│   │   │   │   │   │   │   ├── CouponController.php
+│   │   │   │   │   │   │   ├── ReportController.php
+│   │   │   │   │   │   │   └── SettingsController.php
+│   │   │   │   │   │   │
+│   │   │   │   │   │   └── Payment/
+│   │   │   │   │   │       ├── StripeController.php
+│   │   │   │   │   │       ├── PayPalController.php
+│   │   │   │   │   │       ├── SSLCommerzController.php
+│   │   │   │   │   │       └── WebhookController.php
+│   │   │   │   │   │
+│   │   │   │   │   └── V2/                   # API Version 2 (Future)
+│   │   │   │   │
+│   │   │   │   └── Controller.php             # Base controller
+│   │   │   │
+│   │   │   ├── Middleware/
+│   │   │   │   ├── Authenticate.php
+│   │   │   │   ├── CheckRole.php
+│   │   │   │   ├── CheckVendorStatus.php
+│   │   │   │   ├── CheckSubscription.php
+│   │   │   │   ├── ValidateApiKey.php
+│   │   │   │   ├── LogApiRequest.php
+│   │   │   │   ├── ThrottleRequests.php
+│   │   │   │   ├── VerifyEmailVerified.php
+│   │   │   │   ├── CheckMaintenanceMode.php
+│   │   │   │   └── SanitizeInput.php
+│   │   │   │
+│   │   │   ├── Requests/
+│   │   │   │   ├── Auth/
+│   │   │   │   │   ├── LoginRequest.php
+│   │   │   │   │   ├── RegisterRequest.php
+│   │   │   │   │   └── ResetPasswordRequest.php
+│   │   │   │   ├── Product/
+│   │   │   │   │   ├── StoreProductRequest.php
+│   │   │   │   │   ├── UpdateProductRequest.php
+│   │   │   │   │   └── SearchProductRequest.php
+│   │   │   │   ├── Order/
+│   │   │   │   │   ├── CreateOrderRequest.php
+│   │   │   │   │   ├── UpdateOrderRequest.php
+│   │   │   │   │   └── CancelOrderRequest.php
+│   │   │   │   └── Review/
+│   │   │   │       ├── StoreReviewRequest.php
+│   │   │   │       └── UpdateReviewRequest.php
+│   │   │   │
+│   │   │   ├── Resources/
+│   │   │   │   ├── ProductResource.php
+│   │   │   │   ├── ProductCollection.php
+│   │   │   │   ├── OrderResource.php
+│   │   │   │   ├── OrderCollection.php
+│   │   │   │   ├── UserResource.php
+│   │   │   │   ├── VendorResource.php
+│   │   │   │   ├── CategoryResource.php
+│   │   │   │   ├── ReviewResource.php
+│   │   │   │   └── CartResource.php
+│   │   │   │
+│   │   │   └── Kernel.php                     # HTTP Kernel
+│   │   │
+│   │   ├── Jobs/
+│   │   │   ├── Email/
+│   │   │   │   ├── SendOrderConfirmation.php
+│   │   │   │   ├── SendShippingNotification.php
+│   │   │   │   ├── SendWelcomeEmail.php
+│   │   │   │   └── SendPasswordReset.php
+│   │   │   ├── Notification/
+│   │   │   │   ├── SendVendorNotification.php
+│   │   │   │   ├── SendLowStockAlert.php
+│   │   │   │   └── SendPayoutNotification.php
+│   │   │   ├── Order/
+│   │   │   │   ├── ProcessOrderPayment.php
+│   │   │   │   ├── UpdateInventory.php
+│   │   │   │   └── GenerateInvoice.php
+│   │   │   └── Report/
+│   │   │       ├── GenerateSalesReport.php
+│   │   │       └── GenerateInventoryReport.php
+│   │   │
+│   │   ├── Listeners/
+│   │   │   ├── Order/
+│   │   │   │   ├── SendOrderEmail.php
+│   │   │   │   ├── UpdateInventory.php
+│   │   │   │   ├── CreateCommission.php
+│   │   │   │   ├── NotifyVendor.php
+│   │   │   │   └── UpdateAnalytics.php
+│   │   │   ├── Payment/
+│   │   │   │   ├── ProcessPayment.php
+│   │   │   │   ├── SendReceipt.php
+│   │   │   │   └── UpdateOrderStatus.php
+│   │   │   └── Product/
+│   │   │       ├── IndexInSearch.php
+│   │   │       ├── ClearCache.php
+│   │   │       └── NotifyLowStock.php
+│   │   │
+│   │   ├── Mail/
+│   │   │   ├── OrderConfirmation.php
+│   │   │   ├── OrderShipped.php
+│   │   │   ├── WelcomeEmail.php
+│   │   │   ├── PasswordReset.php
+│   │   │   ├── VendorApproval.php
+│   │   │   └── PayoutProcessed.php
+│   │   │
+│   │   ├── Models/
+│   │   │   ├── User.php
+│   │   │   ├── Customer.php
+│   │   │   ├── Vendor.php
+│   │   │   ├── Admin.php
+│   │   │   ├── Product.php
+│   │   │   ├── ProductImage.php
+│   │   │   ├── ProductVariant.php
+│   │   │   ├── Category.php
+│   │   │   ├── Order.php
+│   │   │   ├── OrderItem.php
+│   │   │   ├── Cart.php
+│   │   │   ├── CartItem.php
+│   │   │   ├── Wishlist.php
+│   │   │   ├── Review.php
+│   │   │   ├── Payment.php
+│   │   │   ├── Refund.php
+│   │   │   ├── Commission.php
+│   │   │   ├── Payout.php
+│   │   │   ├── Coupon.php
+│   │   │   ├── Address.php
+│   │   │   ├── Notification.php
+│   │   │   └── ActivityLog.php
+│   │   │
+│   │   ├── Notifications/
+│   │   │   ├── OrderPlacedNotification.php
+│   │   │   ├── OrderShippedNotification.php
+│   │   │   ├── LowStockNotification.php
+│   │   │   ├── VendorApprovedNotification.php
+│   │   │   └── PayoutRequestedNotification.php
+│   │   │
+│   │   ├── Policies/
+│   │   │   ├── ProductPolicy.php
+│   │   │   ├── OrderPolicy.php
+│   │   │   ├── VendorPolicy.php
+│   │   │   ├── ReviewPolicy.php
+│   │   │   └── PayoutPolicy.php
+│   │   │
+│   │   ├── Providers/
+│   │   │   ├── AppServiceProvider.php
+│   │   │   ├── AuthServiceProvider.php
+│   │   │   ├── EventServiceProvider.php
+│   │   │   ├── RouteServiceProvider.php
+│   │   │   └── RepositoryServiceProvider.php
+│   │   │
+│   │   ├── Repositories/
+│   │   │   ├── Contracts/
+│   │   │   │   ├── ProductRepositoryInterface.php
+│   │   │   │   ├── OrderRepositoryInterface.php
+│   │   │   │   ├── UserRepositoryInterface.php
+│   │   │   │   └── VendorRepositoryInterface.php
+│   │   │   ├── Eloquent/
+│   │   │   │   ├── ProductRepository.php
+│   │   │   │   ├── OrderRepository.php
+│   │   │   │   ├── UserRepository.php
+│   │   │   │   ├── VendorRepository.php
+│   │   │   │   ├── CategoryRepository.php
+│   │   │   │   └── ReviewRepository.php
+│   │   │   └── BaseRepository.php
+│   │   │
+│   │   ├── Services/
+│   │   │   ├── Auth/
+│   │   │   │   ├── AuthService.php
+│   │   │   │   └── JWTService.php
+│   │   │   ├── Cart/
+│   │   │   │   └── CartService.php
+│   │   │   ├── Order/
+│   │   │   │   ├── OrderService.php
+│   │   │   │   └── OrderProcessingService.php
+│   │   │   ├── Payment/
+│   │   │   │   ├── PaymentService.php
+│   │   │   │   ├── StripeService.php
+│   │   │   │   ├── PayPalService.php
+│   │   │   │   └── RefundService.php
+│   │   │   ├── Product/
+│   │   │   │   ├── ProductService.php
+│   │   │   │   └── ProductSearchService.php
+│   │   │   ├── Commission/
+│   │   │   │   └── CommissionCalculator.php
+│   │   │   ├── Notification/
+│   │   │   │   └── NotificationService.php
+│   │   │   └── Analytics/
+│   │   │       └── AnalyticsService.php
+│   │   │
+│   │   └── Traits/
+│   │       ├── HasRoles.php
+│   │       ├── Searchable.php
+│   │       ├── HasUuid.php
+│   │       └── LogsActivity.php
+│   │
+│   ├── bootstrap/
+│   │   ├── app.php
+│   │   └── cache/
+│   │       ├── packages.php
+│   │       ├── services.php
+│   │       └── config.php
+│   │
+│   ├── config/
+│   │   ├── app.php
+│   │   ├── auth.php
+│   │   ├── broadcasting.php
+│   │   ├── cache.php
+│   │   ├── cors.php
+│   │   ├── database.php
+│   │   ├── filesystems.php
+│   │   ├── logging.php
+│   │   ├── mail.php
+│   │   ├── queue.php
+│   │   ├── sanctum.php
+│   │   ├── services.php              # Third-party services
+│   │   ├── session.php
+│   │   └── scout.php                 # Search configuration
+│   │
+│   ├── database/
+│   │   ├── factories/
+│   │   │   ├── UserFactory.php
+│   │   │   ├── ProductFactory.php
+│   │   │   ├── OrderFactory.php
+│   │   │   └── ReviewFactory.php
+│   │   ├── migrations/
+│   │   │   ├── 2024_01_01_create_users_table.php
+│   │   │   ├── 2024_01_02_create_vendors_table.php
+│   │   │   ├── 2024_01_03_create_products_table.php
+│   │   │   ├── 2024_01_04_create_categories_table.php
+│   │   │   ├── 2024_01_05_create_orders_table.php
+│   │   │   ├── 2024_01_06_create_order_items_table.php
+│   │   │   ├── 2024_01_07_create_payments_table.php
+│   │   │   ├── 2024_01_08_create_reviews_table.php
+│   │   │   ├── 2024_01_09_create_carts_table.php
+│   │   │   ├── 2024_01_10_create_wishlists_table.php
+│   │   │   ├── 2024_01_11_create_commissions_table.php
+│   │   │   ├── 2024_01_12_create_payouts_table.php
+│   │   │   └── 2024_01_13_create_coupons_table.php
+│   │   └── seeders/
+│   │       ├── DatabaseSeeder.php
+│   │       ├── AdminSeeder.php
+│   │       ├── CategorySeeder.php
+│   │       ├── ProductSeeder.php
+│   │       └── UserSeeder.php
+│   │
+│   ├── public/
+│   │   ├── index.php                 # Application entry point
+│   │   ├── .htaccess
+│   │   └── robots.txt
+│   │
+│   ├── resources/
+│   │   ├── lang/
+│   │   │   ├── en/
+│   │   │   │   ├── auth.php
+│   │   │   │   ├── messages.php
+│   │   │   │   └── validation.php
+│   │   │   └── bn/                   # Bengali translations
+│   │   │       ├── auth.php
+│   │   │       ├── messages.php
+│   │   │       └── validation.php
+│   │   └── views/
+│   │       ├── emails/
+│   │       │   ├── order-confirmation.blade.php
+│   │       │   ├── order-shipped.blade.php
+│   │       │   └── welcome.blade.php
+│   │       └── pdf/
+│   │           ├── invoice.blade.php
+│   │           └── packing-slip.blade.php
+│   │
+│   ├── routes/
+│   │   ├── api.php                   # API routes
+│   │   ├── web.php                   # Web routes
+│   │   ├── channels.php              # Broadcasting channels
+│   │   └── console.php               # Console commands
+│   │
+│   ├── storage/
+│   │   ├── app/
+│   │   │   ├── public/               # Symlinked to public/storage
+│   │   │   └── private/
+│   │   ├── framework/
+│   │   │   ├── cache/
+│   │   │   ├── sessions/
+│   │   │   └── views/
+│   │   └── logs/
+│   │       └── laravel.log
+│   │
+│   ├── tests/
+│   │   ├── Feature/
+│   │   │   ├── Auth/
+│   │   │   │   ├── LoginTest.php
+│   │   │   │   └── RegisterTest.php
+│   │   │   ├── Product/
+│   │   │   │   ├── CreateProductTest.php
+│   │   │   │   └── SearchProductTest.php
+│   │   │   ├── Order/
+│   │   │   │   ├── CreateOrderTest.php
+│   │   │   │   └── CancelOrderTest.php
+│   │   │   └── Payment/
+│   │   │       └── ProcessPaymentTest.php
+│   │   ├── Unit/
+│   │   │   ├── Services/
+│   │   │   │   ├── CartServiceTest.php
+│   │   │   │   ├── OrderServiceTest.php
+│   │   │   │   └── CommissionCalculatorTest.php
+│   │   │   └── Models/
+│   │   │       ├── ProductTest.php
+│   │   │       └── OrderTest.php
+│   │   ├── TestCase.php
+│   │   └── CreatesApplication.php
+│   │
+│   ├── .env                           # Environment configuration
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── artisan                        # CLI tool
+│   ├── composer.json
+│   ├── composer.lock
+│   ├── package.json
+│   ├── phpunit.xml
+│   └── README.md
+│
+├── frontend-customer/                 # Next.js Customer Storefront
+│   ├── public/
+│   │   ├── images/
+│   │   ├── icons/
+│   │   └── favicon.ico
+│   ├── src/
+│   │   ├── app/                      # Next.js 14 App Router
+│   │   │   ├── (auth)/
+│   │   │   │   ├── login/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── register/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── layout.tsx
+│   │   │   ├── (shop)/
+│   │   │   │   ├── page.tsx          # Homepage
+│   │   │   │   ├── products/
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── page.tsx
+│   │   │   │   ├── categories/
+│   │   │   │   │   └── [slug]/
+│   │   │   │   │       └── page.tsx
+│   │   │   │   ├── cart/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── checkout/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── layout.tsx
+│   │   │   ├── (account)/
+│   │   │   │   ├── dashboard/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── orders/
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── page.tsx
+│   │   │   │   ├── wishlist/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── addresses/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── profile/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── layout.tsx
+│   │   │   ├── api/
+│   │   │   │   └── auth/
+│   │   │   │       └── [...nextauth]/
+│   │   │   │           └── route.ts
+│   │   │   ├── layout.tsx            # Root layout
+│   │   │   ├── loading.tsx
+│   │   │   ├── error.tsx
+│   │   │   └── not-found.tsx
+│   │   │
+│   │   ├── components/
+│   │   │   ├── ui/                   # Reusable UI components
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── Input.tsx
+│   │   │   │   ├── Card.tsx
+│   │   │   │   ├── Modal.tsx
+│   │   │   │   ├── Dropdown.tsx
+│   │   │   │   └── Badge.tsx
+│   │   │   ├── layout/
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── Footer.tsx
+│   │   │   │   ├── Navigation.tsx
+│   │   │   │   └── Sidebar.tsx
+│   │   │   ├── product/
+│   │   │   │   ├── ProductCard.tsx
+│   │   │   │   ├── ProductGrid.tsx
+│   │   │   │   ├── ProductDetails.tsx
+│   │   │   │   ├── ProductReviews.tsx
+│   │   │   │   └── ProductFilters.tsx
+│   │   │   ├── cart/
+│   │   │   │   ├── CartItem.tsx
+│   │   │   │   ├── CartSummary.tsx
+│   │   │   │   └── CartDrawer.tsx
+│   │   │   └── checkout/
+│   │   │       ├── CheckoutForm.tsx
+│   │   │       ├── ShippingForm.tsx
+│   │   │       ├── PaymentForm.tsx
+│   │   │       └── OrderSummary.tsx
+│   │   │
+│   │   ├── lib/
+│   │   │   ├── api/                  # API client functions
+│   │   │   │   ├── auth.ts
+│   │   │   │   ├── products.ts
+│   │   │   │   ├── orders.ts
+│   │   │   │   ├── cart.ts
+│   │   │   │   └── reviews.ts
+│   │   │   ├── hooks/                # Custom React hooks
+│   │   │   │   ├── useAuth.ts
+│   │   │   │   ├── useCart.ts
+│   │   │   │   ├── useProducts.ts
+│   │   │   │   └── useOrders.ts
+│   │   │   ├── utils/
+│   │   │   │   ├── formatters.ts
+│   │   │   │   ├── validators.ts
+│   │   │   │   └── helpers.ts
+│   │   │   └── axios.ts              # API client configuration
+│   │   │
+│   │   ├── store/                    # State management (Zustand/Redux)
+│   │   │   ├── authStore.ts
+│   │   │   ├── cartStore.ts
+│   │   │   └── uiStore.ts
+│   │   │
+│   │   ├── styles/
+│   │   │   ├── globals.css
+│   │   │   └── variables.css
+│   │   │
+│   │   └── types/
+│   │       ├── product.ts
+│   │       ├── order.ts
+│   │       ├── user.ts
+│   │       └── cart.ts
+│   │
+│   ├── .env.local
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── next.config.js
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   └── README.md
+│
+├── frontend-vendor/                   # React Vendor Dashboard
+│   ├── public/
+│   │   └── assets/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Products/
+│   │   │   │   ├── ProductList.tsx
+│   │   │   │   ├── AddProduct.tsx
+│   │   │   │   └── EditProduct.tsx
+│   │   │   ├── Orders/
+│   │   │   │   ├── OrderList.tsx
+│   │   │   │   └── OrderDetail.tsx
+│   │   │   ├── Payouts/
+│   │   │   │   └── PayoutList.tsx
+│   │   │   ├── Reports/
+│   │   │   │   └── SalesReport.tsx
+│   │   │   └── Settings/
+│   │   │       └── VendorSettings.tsx
+│   │   │
+│   │   ├── components/
+│   │   │   ├── common/
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── Input.tsx
+│   │   │   │   ├── Table.tsx
+│   │   │   │   └── Modal.tsx
+│   │   │   ├── layout/
+│   │   │   │   ├── Sidebar.tsx
+│   │   │   │   ├── Header.tsx
+│   │   │   │   └── Footer.tsx
+│   │   │   └── charts/
+│   │   │       ├── LineChart.tsx
+│   │   │       ├── BarChart.tsx
+│   │   │       └── PieChart.tsx
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.ts
+│   │   │   ├── auth.ts
+│   │   │   ├── products.ts
+│   │   │   └── orders.ts
+│   │   │
+│   │   ├── store/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── utils/
+│   │   │   └── helpers.ts
+│   │   │
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── routes.tsx
+│   │
+│   ├── .env
+│   ├── .env.example
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── README.md
+│
+├── frontend-admin/                    # Vue.js Admin Panel
+│   ├── public/
+│   │   └── assets/
+│   ├── src/
+│   │   ├── views/
+│   │   │   ├── Dashboard.vue
+│   │   │   ├── Products/
+│   │   │   │   ├── ProductList.vue
+│   │   │   │   └── ProductForm.vue
+│   │   │   ├── Orders/
+│   │   │   │   ├── OrderList.vue
+│   │   │   │   └── OrderDetail.vue
+│   │   │   ├── Customers/
+│   │   │   │   └── CustomerList.vue
+│   │   │   ├── Vendors/
+│   │   │   │   ├── VendorList.vue
+│   │   │   │   └── VendorApproval.vue
+│   │   │   ├── Categories/
+│   │   │   │   └── CategoryManager.vue
+│   │   │   ├── Reviews/
+│   │   │   │   └── ReviewModeration.vue
+│   │   │   ├── Coupons/
+│   │   │   │   └── CouponManager.vue
+│   │   │   ├── Reports/
+│   │   │   │   └── Analytics.vue
+│   │   │   └── Settings/
+│   │   │       └── SystemSettings.vue
+│   │   │
+│   │   ├── components/
+│   │   │   ├── common/
+│   │   │   ├── layout/
+│   │   │   └── charts/
+│   │   │
+│   │   ├── router/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── store/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── services/
+│   │   │   └── api.ts
+│   │   │
+│   │   ├── App.vue
+│   │   └── main.ts
+│   │
+│   ├── .env
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── README.md
+│
+├── docker/                            # Docker configuration
+│   ├── nginx/
+│   │   ├── Dockerfile
+│   │   ├── nginx.conf
+│   │   └── default.conf
+│   ├── php/
+│   │   ├── Dockerfile
+│   │   └── php.ini
+│   ├── postgres/
+│   │   ├── Dockerfile
+│   │   └── init.sql
+│   └── redis/
+│       └── redis.conf
+│
+├── deployment/                        # Deployment scripts & configs
+│   ├── kubernetes/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── ingress.yaml
+│   ├── terraform/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   └── scripts/
+│       ├── deploy.sh
+│       ├── rollback.sh
+│       └── backup.sh
+│
+├── docs/                              # Documentation
+│   ├── api/
+│   │   └── api-documentation.md
+│   ├── database/
+│   │   └── schema.md
+│   ├── deployment/
+│   │   └── deployment-guide.md
+│   └── README.md
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml                     # Continuous Integration
+│       └── cd.yml                     # Continuous Deployment
+│
+├── docker-compose.yml                 # Local development
+├── docker-compose.prod.yml            # Production
+├── .gitignore
+├── .editorconfig
+├── Makefile
+└── README.md
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         KEY DIRECTORIES EXPLAINED                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Backend (Laravel):
+──────────────────
+app/Http/Controllers/     → Request handlers, organized by API version & user type
+app/Services/             → Business logic layer, reusable across controllers
+app/Repositories/         → Data access layer, abstracts database queries
+app/Models/               → Eloquent ORM models, database table representations
+app/Events/               → Event classes for event-driven architecture
+app/Listeners/            → Event listener classes
+app/Jobs/                 → Queue jobs for async processing
+database/migrations/      → Database schema version control
+routes/api.php            → API endpoint definitions
+config/                   → Application configuration files
+
+Frontend Customer (Next.js):
+────────────────────────────
+src/app/                  → Next.js 14 App Router with nested routes
+src/components/           → Reusable React components
+src/lib/api/              → API client functions for backend communication
+src/store/                → Global state management
+src/types/                → TypeScript type definitions
+
+Frontend Vendor (React):
+────────────────────────
+src/pages/                → Page components
+src/components/           → Reusable UI components
+src/services/             → API service layer
+src/store/                → Redux/Context state management
+
+Frontend Admin (Vue.js):
+────────────────────────
+src/views/                → Page-level components
+src/components/           → Reusable Vue components
+src/router/               → Vue Router configuration
+src/store/                → Vuex state management
+
+Infrastructure:
+───────────────
+docker/                   → Docker container configurations
+deployment/               → Deployment automation scripts
+.github/workflows/        → CI/CD pipeline definitions
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
 <h2>2.2 Component Interaction Flow</h2>
 <p>Customer Product Search Flow</p>
 <p>Customer Browser</p>
@@ -43241,6 +43978,862 @@ return [
      */
     &#x27;supports_credentials&#x27; =&gt; true,
 ];</code></pre></div>
+</div>
+
+<div class="tab-panel" id="tab13" style="display:none">
+  <div class="doc-header">
+    <div class="doc-icon">📁</div>
+    <div class="doc-info">
+      <div class="doc-title">Complete Project File & Directory Structure</div>
+      <div class="doc-meta">Multi-Vendor E-commerce Platform &nbsp;·&nbsp; Feb 2026 &nbsp;·&nbsp; v2.0</div>
+    </div>
+  </div>
+  <div class="doc-body">
+
+<h1>COMPLETE PROJECT FILE STRUCTURE</h1>
+
+<p>This document provides a comprehensive overview of the entire project file and directory structure for the Multi-Vendor E-commerce Platform. It includes the Laravel backend API, Next.js customer frontend, React vendor dashboard, Vue.js admin panel, infrastructure configurations, and deployment resources.</p>
+
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>1. PROJECT ROOT STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    MULTI-VENDOR E-COMMERCE PLATFORM                      │
+│                       COMPLETE FILE STRUCTURE                            │
+└─────────────────────────────────────────────────────────────────────────┘
+
+ecommerce-platform/
+│
+├── backend/                                    # Laravel Backend API
+├── frontend-customer/                          # Next.js Customer Storefront
+├── frontend-vendor/                            # React Vendor Dashboard
+├── frontend-admin/                             # Vue.js Admin Panel
+├── docker/                                     # Docker configuration
+├── deployment/                                 # Deployment scripts & configs
+├── docs/                                       # Documentation
+├── .github/                                    # CI/CD workflows
+├── docker-compose.yml                          # Local development
+├── docker-compose.prod.yml                     # Production
+├── .gitignore
+├── .editorconfig
+├── Makefile
+└── README.md
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>2. BACKEND (LARAVEL) STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+backend/
+│
+├── app/
+│   ├── Console/
+│   │   ├── Commands/
+│   │   │   ├── ProcessPendingPayouts.php
+│   │   │   ├── SendAbandonedCartReminders.php
+│   │   │   ├── UpdateProductSearchIndex.php
+│   │   │   ├── GenerateDailyReports.php
+│   │   │   └── CleanExpiredSessions.php
+│   │   └── Kernel.php                         # Task scheduler
+│   │
+│   ├── Events/
+│   │   ├── Order/
+│   │   │   ├── OrderPlaced.php
+│   │   │   ├── OrderShipped.php
+│   │   │   ├── OrderDelivered.php
+│   │   │   ├── OrderCancelled.php
+│   │   │   └── OrderRefunded.php
+│   │   ├── Payment/
+│   │   │   ├── PaymentReceived.php
+│   │   │   ├── PaymentFailed.php
+│   │   │   └── RefundProcessed.php
+│   │   ├── Product/
+│   │   │   ├── ProductCreated.php
+│   │   │   ├── ProductUpdated.php
+│   │   │   ├── ProductApproved.php
+│   │   │   └── ProductLowStock.php
+│   │   ├── Vendor/
+│   │   │   ├── VendorRegistered.php
+│   │   │   ├── VendorApproved.php
+│   │   │   └── PayoutRequested.php
+│   │   └── User/
+│   │       ├── UserRegistered.php
+│   │       ├── UserVerified.php
+│   │       └── PasswordChanged.php
+│   │
+│   ├── Exceptions/
+│   │   ├── Handler.php                        # Global exception handler
+│   │   ├── InsufficientStockException.php
+│   │   ├── PaymentFailedException.php
+│   │   ├── InvalidCouponException.php
+│   │   └── UnauthorizedAccessException.php
+│   │
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── API/
+│   │   │   │   ├── V1/
+│   │   │   │   │   ├── Auth/
+│   │   │   │   │   │   ├── LoginController.php
+│   │   │   │   │   │   ├── RegisterController.php
+│   │   │   │   │   │   ├── LogoutController.php
+│   │   │   │   │   │   ├── ForgotPasswordController.php
+│   │   │   │   │   │   └── ResetPasswordController.php
+│   │   │   │   │   │
+│   │   │   │   │   ├── Customer/
+│   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   ├── CategoryController.php
+│   │   │   │   │   │   ├── CartController.php
+│   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   ├── WishlistController.php
+│   │   │   │   │   │   ├── ReviewController.php
+│   │   │   │   │   │   ├── AddressController.php
+│   │   │   │   │   │   └── ProfileController.php
+│   │   │   │   │   │
+│   │   │   │   │   ├── Vendor/
+│   │   │   │   │   │   ├── DashboardController.php
+│   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   ├── PayoutController.php
+│   │   │   │   │   │   ├── SettingsController.php
+│   │   │   │   │   │   └── ReportController.php
+│   │   │   │   │   │
+│   │   │   │   │   ├── Admin/
+│   │   │   │   │   │   ├── DashboardController.php
+│   │   │   │   │   │   ├── ProductController.php
+│   │   │   │   │   │   ├── OrderController.php
+│   │   │   │   │   │   ├── CustomerController.php
+│   │   │   │   │   │   ├── VendorController.php
+│   │   │   │   │   │   ├── CategoryController.php
+│   │   │   │   │   │   ├── ReviewController.php
+│   │   │   │   │   │   ├── CouponController.php
+│   │   │   │   │   │   ├── ReportController.php
+│   │   │   │   │   │   └── SettingsController.php
+│   │   │   │   │   │
+│   │   │   │   │   └── Payment/
+│   │   │   │   │       ├── StripeController.php
+│   │   │   │   │       ├── PayPalController.php
+│   │   │   │   │       ├── SSLCommerzController.php
+│   │   │   │   │       └── WebhookController.php
+│   │   │   │   │
+│   │   │   │   └── V2/                       # API Version 2 (Future)
+│   │   │   │
+│   │   │   └── Controller.php                 # Base controller
+│   │   │
+│   │   ├── Middleware/
+│   │   │   ├── Authenticate.php
+│   │   │   ├── CheckRole.php
+│   │   │   ├── CheckVendorStatus.php
+│   │   │   ├── CheckSubscription.php
+│   │   │   ├── ValidateApiKey.php
+│   │   │   ├── LogApiRequest.php
+│   │   │   ├── ThrottleRequests.php
+│   │   │   ├── VerifyEmailVerified.php
+│   │   │   ├── CheckMaintenanceMode.php
+│   │   │   └── SanitizeInput.php
+│   │   │
+│   │   ├── Requests/
+│   │   │   ├── Auth/
+│   │   │   │   ├── LoginRequest.php
+│   │   │   │   ├── RegisterRequest.php
+│   │   │   │   └── ResetPasswordRequest.php
+│   │   │   ├── Product/
+│   │   │   │   ├── StoreProductRequest.php
+│   │   │   │   ├── UpdateProductRequest.php
+│   │   │   │   └── SearchProductRequest.php
+│   │   │   ├── Order/
+│   │   │   │   ├── CreateOrderRequest.php
+│   │   │   │   ├── UpdateOrderRequest.php
+│   │   │   │   └── CancelOrderRequest.php
+│   │   │   └── Review/
+│   │   │       ├── StoreReviewRequest.php
+│   │   │       └── UpdateReviewRequest.php
+│   │   │
+│   │   ├── Resources/
+│   │   │   ├── ProductResource.php
+│   │   │   ├── ProductCollection.php
+│   │   │   ├── OrderResource.php
+│   │   │   ├── OrderCollection.php
+│   │   │   ├── UserResource.php
+│   │   │   ├── VendorResource.php
+│   │   │   ├── CategoryResource.php
+│   │   │   ├── ReviewResource.php
+│   │   │   └── CartResource.php
+│   │   │
+│   │   └── Kernel.php                         # HTTP Kernel
+│   │
+│   ├── Jobs/
+│   │   ├── Email/
+│   │   │   ├── SendOrderConfirmation.php
+│   │   │   ├── SendShippingNotification.php
+│   │   │   ├── SendWelcomeEmail.php
+│   │   │   └── SendPasswordReset.php
+│   │   ├── Notification/
+│   │   │   ├── SendVendorNotification.php
+│   │   │   ├── SendLowStockAlert.php
+│   │   │   └── SendPayoutNotification.php
+│   │   ├── Order/
+│   │   │   ├── ProcessOrderPayment.php
+│   │   │   ├── UpdateInventory.php
+│   │   │   └── GenerateInvoice.php
+│   │   └── Report/
+│   │       ├── GenerateSalesReport.php
+│   │       └── GenerateInventoryReport.php
+│   │
+│   ├── Listeners/
+│   │   ├── Order/
+│   │   │   ├── SendOrderEmail.php
+│   │   │   ├── UpdateInventory.php
+│   │   │   ├── CreateCommission.php
+│   │   │   ├── NotifyVendor.php
+│   │   │   └── UpdateAnalytics.php
+│   │   ├── Payment/
+│   │   │   ├── ProcessPayment.php
+│   │   │   ├── SendReceipt.php
+│   │   │   └── UpdateOrderStatus.php
+│   │   └── Product/
+│   │       ├── IndexInSearch.php
+│   │       ├── ClearCache.php
+│   │       └── NotifyLowStock.php
+│   │
+│   ├── Mail/
+│   │   ├── OrderConfirmation.php
+│   │   ├── OrderShipped.php
+│   │   ├── WelcomeEmail.php
+│   │   ├── PasswordReset.php
+│   │   ├── VendorApproval.php
+│   │   └── PayoutProcessed.php
+│   │
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Customer.php
+│   │   ├── Vendor.php
+│   │   ├── Admin.php
+│   │   ├── Product.php
+│   │   ├── ProductImage.php
+│   │   ├── ProductVariant.php
+│   │   ├── Category.php
+│   │   ├── Order.php
+│   │   ├── OrderItem.php
+│   │   ├── Cart.php
+│   │   ├── CartItem.php
+│   │   ├── Wishlist.php
+│   │   ├── Review.php
+│   │   ├── Payment.php
+│   │   ├── Refund.php
+│   │   ├── Commission.php
+│   │   ├── Payout.php
+│   │   ├── Coupon.php
+│   │   ├── Address.php
+│   │   ├── Notification.php
+│   │   └── ActivityLog.php
+│   │
+│   ├── Notifications/
+│   │   ├── OrderPlacedNotification.php
+│   │   ├── OrderShippedNotification.php
+│   │   ├── LowStockNotification.php
+│   │   ├── VendorApprovedNotification.php
+│   │   └── PayoutRequestedNotification.php
+│   │
+│   ├── Policies/
+│   │   ├── ProductPolicy.php
+│   │   ├── OrderPolicy.php
+│   │   ├── VendorPolicy.php
+│   │   ├── ReviewPolicy.php
+│   │   └── PayoutPolicy.php
+│   │
+│   ├── Providers/
+│   │   ├── AppServiceProvider.php
+│   │   ├── AuthServiceProvider.php
+│   │   │   ├── EventServiceProvider.php
+│   │   ├── RouteServiceProvider.php
+│   │   └── RepositoryServiceProvider.php
+│   │
+│   ├── Repositories/
+│   │   ├── Contracts/
+│   │   │   ├── ProductRepositoryInterface.php
+│   │   │   ├── OrderRepositoryInterface.php
+│   │   │   ├── UserRepositoryInterface.php
+│   │   │   └── VendorRepositoryInterface.php
+│   │   ├── Eloquent/
+│   │   │   ├── ProductRepository.php
+│   │   │   ├── OrderRepository.php
+│   │   │   ├── UserRepository.php
+│   │   │   ├── VendorRepository.php
+│   │   │   ├── CategoryRepository.php
+│   │   │   └── ReviewRepository.php
+│   │   └── BaseRepository.php
+│   │
+│   ├── Services/
+│   │   ├── Auth/
+│   │   │   ├── AuthService.php
+│   │   │   └── JWTService.php
+│   │   ├── Cart/
+│   │   │   └── CartService.php
+│   │   ├── Order/
+│   │   │   ├── OrderService.php
+│   │   │   └── OrderProcessingService.php
+│   │   ├── Payment/
+│   │   │   ├── PaymentService.php
+│   │   │   ├── StripeService.php
+│   │   │   ├── PayPalService.php
+│   │   │   └── RefundService.php
+│   │   ├── Product/
+│   │   │   ├── ProductService.php
+│   │   │   └── ProductSearchService.php
+│   │   ├── Commission/
+│   │   │   └── CommissionCalculator.php
+│   │   ├── Notification/
+│   │   │   └── NotificationService.php
+│   │   └── Analytics/
+│   │       └── AnalyticsService.php
+│   │
+│   └── Traits/
+│       ├── HasRoles.php
+│       ├── Searchable.php
+│       ├── HasUuid.php
+│       └── LogsActivity.php
+│
+├── bootstrap/
+│   ├── app.php
+│   └── cache/
+│       ├── packages.php
+│       ├── services.php
+│       └── config.php
+│
+├── config/
+│   ├── app.php
+│   ├── auth.php
+│   ├── broadcasting.php
+│   ├── cache.php
+│   ├── cors.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── queue.php
+│   ├── sanctum.php
+│   ├── services.php                            # Third-party services
+│   ├── session.php
+│   └── scout.php                               # Search configuration
+│
+├── database/
+│   ├── factories/
+│   │   ├── UserFactory.php
+│   │   ├── ProductFactory.php
+│   │   ├── OrderFactory.php
+│   │   └── ReviewFactory.php
+│   ├── migrations/
+│   │   ├── 2024_01_01_create_users_table.php
+│   │   ├── 2024_01_02_create_vendors_table.php
+│   │   ├── 2024_01_03_create_products_table.php
+│   │   ├── 2024_01_04_create_categories_table.php
+│   │   ├── 2024_01_05_create_orders_table.php
+│   │   ├── 2024_01_06_create_order_items_table.php
+│   │   ├── 2024_01_07_create_payments_table.php
+│   │   ├── 2024_01_08_create_reviews_table.php
+│   │   ├── 2024_01_09_create_carts_table.php
+│   │   ├── 2024_01_10_create_wishlists_table.php
+│   │   ├── 2024_01_11_create_commissions_table.php
+│   │   ├── 2024_01_12_create_payouts_table.php
+│   │   └── 2024_01_13_create_coupons_table.php
+│   └── seeders/
+│       ├── DatabaseSeeder.php
+│       ├── AdminSeeder.php
+│       ├── CategorySeeder.php
+│       ├── ProductSeeder.php
+│       └── UserSeeder.php
+│
+├── public/
+│   ├── index.php                               # Application entry point
+│   ├── .htaccess
+│   └── robots.txt
+│
+├── resources/
+│   ├── lang/
+│   │   ├── en/
+│   │   │   ├── auth.php
+│   │   │   ├── messages.php
+│   │   │   └── validation.php
+│   │   └── bn/                                 # Bengali translations
+│   │       ├── auth.php
+│   │       ├── messages.php
+│   │       └── validation.php
+│   └── views/
+│       ├── emails/
+│       │   ├── order-confirmation.blade.php
+│       │   ├── order-shipped.blade.php
+│       │   └── welcome.blade.php
+│       └── pdf/
+│           ├── invoice.blade.php
+│           └── packing-slip.blade.php
+│
+├── routes/
+│   ├── api.php                                 # API routes
+│   ├── web.php                                 # Web routes
+│   ├── channels.php                            # Broadcasting channels
+│   └── console.php                             # Console commands
+│
+├── storage/
+│   ├── app/
+│   │   ├── public/                             # Symlinked to public/storage
+│   │   └── private/
+│   ├── framework/
+│   │   ├── cache/
+│   │   ├── sessions/
+│   │   └── views/
+│   └── logs/
+│       └── laravel.log
+│
+├── tests/
+│   ├── Feature/
+│   │   ├── Auth/
+│   │   │   ├── LoginTest.php
+│   │   │   └── RegisterTest.php
+│   │   ├── Product/
+│   │   │   ├── CreateProductTest.php
+│   │   │   └── SearchProductTest.php
+│   │   ├── Order/
+│   │   │   ├── CreateOrderTest.php
+│   │   │   └── CancelOrderTest.php
+│   │   └── Payment/
+│   │       └── ProcessPaymentTest.php
+│   ├── Unit/
+│   │   ├── Services/
+│   │   │   ├── CartServiceTest.php
+│   │   │   ├── OrderServiceTest.php
+│   │   │   └── CommissionCalculatorTest.php
+│   │   └── Models/
+│   │       ├── ProductTest.php
+│   │       └── OrderTest.php
+│   ├── TestCase.php
+│   └── CreatesApplication.php
+│
+├── .env                                        # Environment configuration
+├── .env.example
+├── .gitignore
+├── artisan                                     # CLI tool
+├── composer.json
+├── composer.lock
+├── package.json
+├── phpunit.xml
+└── README.md
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>3. FRONTEND CUSTOMER (NEXT.JS) STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+frontend-customer/
+│
+├── public/
+│   ├── images/
+│   ├── icons/
+│   └── favicon.ico
+│
+├── src/
+│   ├── app/                                    # Next.js 14 App Router
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   │   └── page.tsx
+│   │   │   ├── register/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   │
+│   │   ├── (shop)/
+│   │   │   ├── page.tsx                        # Homepage
+│   │   │   ├── products/
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       └── page.tsx
+│   │   │   ├── categories/
+│   │   │   │   └── [slug]/
+│   │   │   │       └── page.tsx
+│   │   │   ├── cart/
+│   │   │   │   └── page.tsx
+│   │   │   ├── checkout/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   │
+│   │   ├── (account)/
+│   │   │   ├── dashboard/
+│   │   │   │   └── page.tsx
+│   │   │   ├── orders/
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── [id]/
+│   │   │   │       └── page.tsx
+│   │   │   ├── wishlist/
+│   │   │   │   └── page.tsx
+│   │   │   ├── addresses/
+│   │   │   │   └── page.tsx
+│   │   │   ├── profile/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx
+│   │   │
+│   │   ├── api/
+│   │   │   └── auth/
+│   │   │       └── [...nextauth]/
+│   │   │           └── route.ts
+│   │   │
+│   │   ├── layout.tsx                          # Root layout
+│   │   ├── loading.tsx
+│   │   ├── error.tsx
+│   │   └── not-found.tsx
+│   │
+│   ├── components/
+│   │   ├── ui/                                 # Reusable UI components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Modal.tsx
+│   │   │   ├── Dropdown.tsx
+│   │   │   └── Badge.tsx
+│   │   ├── layout/
+│   │   │   ├── Header.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Navigation.tsx
+│   │   │   └── Sidebar.tsx
+│   │   ├── product/
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── ProductGrid.tsx
+│   │   │   ├── ProductDetails.tsx
+│   │   │   ├── ProductReviews.tsx
+│   │   │   └── ProductFilters.tsx
+│   │   ├── cart/
+│   │   │   ├── CartItem.tsx
+│   │   │   ├── CartSummary.tsx
+│   │   │   └── CartDrawer.tsx
+│   │   └── checkout/
+│   │       ├── CheckoutForm.tsx
+│   │       ├── ShippingForm.tsx
+│   │       ├── PaymentForm.tsx
+│   │       └── OrderSummary.tsx
+│   │
+│   ├── lib/
+│   │   ├── api/                                # API client functions
+│   │   │   ├── auth.ts
+│   │   │   ├── products.ts
+│   │   │   ├── orders.ts
+│   │   │   ├── cart.ts
+│   │   │   └── reviews.ts
+│   │   ├── hooks/                              # Custom React hooks
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useCart.ts
+│   │   │   ├── useProducts.ts
+│   │   │   └── useOrders.ts
+│   │   ├── utils/
+│   │   │   ├── formatters.ts
+│   │   │   ├── validators.ts
+│   │   │   └── helpers.ts
+│   │   └── axios.ts                            # API client configuration
+│   │
+│   ├── store/                                  # State management
+│   │   ├── authStore.ts
+│   │   ├── cartStore.ts
+│   │   └── uiStore.ts
+│   │
+│   ├── styles/
+│   │   ├── globals.css
+│   │   └── variables.css
+│   │
+│   └── types/
+│       ├── product.ts
+│       ├── order.ts
+│       ├── user.ts
+│       └── cart.ts
+│
+├── .env.local
+├── .env.example
+├── .gitignore
+├── next.config.js
+├── package.json
+├── tailwind.config.js
+├── tsconfig.json
+└── README.md
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>4. FRONTEND VENDOR (REACT) STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+frontend-vendor/
+│
+├── public/
+│   └── assets/
+│
+├── src/
+│   ├── pages/
+│   │   ├── Dashboard.tsx
+│   │   ├── Products/
+│   │   │   ├── ProductList.tsx
+│   │   │   ├── AddProduct.tsx
+│   │   │   └── EditProduct.tsx
+│   │   ├── Orders/
+│   │   │   ├── OrderList.tsx
+│   │   │   └── OrderDetail.tsx
+│   │   ├── Payouts/
+│   │   │   └── PayoutList.tsx
+│   │   ├── Reports/
+│   │   │   └── SalesReport.tsx
+│   │   └── Settings/
+│   │       └── VendorSettings.tsx
+│   │
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── Table.tsx
+│   │   │   └── Modal.tsx
+│   │   ├── layout/
+│   │   │   ├── Sidebar.tsx
+│   │   │   ├── Header.tsx
+│   │   │   └── Footer.tsx
+│   │   └── charts/
+│   │       ├── LineChart.tsx
+│   │       ├── BarChart.tsx
+│   │       └── PieChart.tsx
+│   │
+│   ├── services/
+│   │   ├── api.ts
+│   │   ├── auth.ts
+│   │   ├── products.ts
+│   │   └── orders.ts
+│   │
+│   ├── store/
+│   │   └── index.ts
+│   │
+│   ├── utils/
+│   │   └── helpers.ts
+│   │
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── routes.tsx
+│
+├── .env
+├── .env.example
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>5. FRONTEND ADMIN (VUE.JS) STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+frontend-admin/
+│
+├── public/
+│   └── assets/
+│
+├── src/
+│   ├── views/
+│   │   ├── Dashboard.vue
+│   │   ├── Products/
+│   │   │   ├── ProductList.vue
+│   │   │   └── ProductForm.vue
+│   │   ├── Orders/
+│   │   │   ├── OrderList.vue
+│   │   │   └── OrderDetail.vue
+│   │   ├── Customers/
+│   │   │   └── CustomerList.vue
+│   │   ├── Vendors/
+│   │   │   ├── VendorList.vue
+│   │   │   └── VendorApproval.vue
+│   │   ├── Categories/
+│   │   │   └── CategoryManager.vue
+│   │   ├── Reviews/
+│   │   │   └── ReviewModeration.vue
+│   │   ├── Coupons/
+│   │   │   └── CouponManager.vue
+│   │   ├── Reports/
+│   │   │   └── Analytics.vue
+│   │   └── Settings/
+│   │       └── SystemSettings.vue
+│   │
+│   ├── components/
+│   │   ├── common/
+│   │   ├── layout/
+│   │   └── charts/
+│   │
+│   ├── router/
+│   │   └── index.ts
+│   │
+│   ├── store/
+│   │   └── index.ts
+│   │
+│   ├── services/
+│   │   └── api.ts
+│   │
+│   ├── App.vue
+│   └── main.ts
+│
+├── .env
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>6. DOCKER & INFRASTRUCTURE STRUCTURE</h2>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+docker/
+│
+├── nginx/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── default.conf
+│
+├── php/
+│   ├── Dockerfile
+│   └── php.ini
+│
+├── postgres/
+│   ├── Dockerfile
+│   └── init.sql
+│
+└── redis/
+    └── redis.conf
+
+
+deployment/
+│
+├── kubernetes/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── ingress.yaml
+│
+├── terraform/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+│
+└── scripts/
+    ├── deploy.sh
+    ├── rollback.sh
+    └── backup.sh
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>7. KEY DIRECTORIES EXPLAINED</h2>
+
+<h3>Backend (Laravel)</h3>
+
+<p><strong>app/Http/Controllers/</strong> → Request handlers organized by API version and user type (Customer, Vendor, Admin). Each controller handles specific endpoints and delegates business logic to service classes.</p>
+
+<p><strong>app/Services/</strong> → Business logic layer containing reusable service classes. Services are used across multiple controllers and encapsulate complex operations like order processing, payment handling, and commission calculations.</p>
+
+<p><strong>app/Repositories/</strong> → Data access layer that abstracts database queries from business logic. Implements repository pattern with interfaces (Contracts) and Eloquent implementations.</p>
+
+<p><strong>app/Models/</strong> → Eloquent ORM models representing database tables. Models define relationships, scopes, accessors, and mutators for data manipulation.</p>
+
+<p><strong>app/Events/</strong> → Event classes for event-driven architecture. Events are dispatched when significant actions occur (order placed, payment received, etc.).</p>
+
+<p><strong>app/Listeners/</strong> → Event listener classes that respond to dispatched events. Listeners handle side effects like sending emails, updating inventory, and triggering notifications.</p>
+
+<p><strong>app/Jobs/</strong> → Queue jobs for asynchronous processing. Jobs handle time-consuming tasks like email sending, report generation, and search indexing.</p>
+
+<p><strong>database/migrations/</strong> → Database schema version control. Each migration file represents a change to the database structure with up() and down() methods.</p>
+
+<p><strong>routes/api.php</strong> → API endpoint definitions with middleware, versioning, and route groups for different user types.</p>
+
+<p><strong>config/</strong> → Application configuration files for database, cache, mail, queue, and third-party services.</p>
+
+<h3>Frontend Customer (Next.js)</h3>
+
+<p><strong>src/app/</strong> → Next.js 14 App Router with nested routes and layouts. Uses route groups for authentication, shop, and account sections.</p>
+
+<p><strong>src/components/</strong> → Reusable React components organized by feature (UI, layout, product, cart, checkout).</p>
+
+<p><strong>src/lib/api/</strong> → API client functions for backend communication using Axios with interceptors for authentication.</p>
+
+<p><strong>src/store/</strong> → Global state management using Zustand for authentication, cart, and UI state.</p>
+
+<p><strong>src/types/</strong> → TypeScript type definitions for products, orders, users, and other entities.</p>
+
+<h3>Frontend Vendor (React)</h3>
+
+<p><strong>src/pages/</strong> → Page-level components for dashboard, products, orders, payouts, reports, and settings.</p>
+
+<p><strong>src/components/</strong> → Reusable UI components including common elements, layout components, and chart components.</p>
+
+<p><strong>src/services/</strong> → API service layer for backend communication with authentication and error handling.</p>
+
+<p><strong>src/store/</strong> → Redux or Context API for state management across vendor dashboard.</p>
+
+<h3>Frontend Admin (Vue.js)</h3>
+
+<p><strong>src/views/</strong> → Page-level Vue components for all admin panel features.</p>
+
+<p><strong>src/components/</strong> → Reusable Vue components for common UI elements and layouts.</p>
+
+<p><strong>src/router/</strong> → Vue Router configuration with route guards for authentication and authorization.</p>
+
+<p><strong>src/store/</strong> → Vuex state management for admin panel data and UI state.</p>
+
+<h3>Infrastructure</h3>
+
+<p><strong>docker/</strong> → Docker container configurations for NGINX, PHP-FPM, PostgreSQL, and Redis.</p>
+
+<p><strong>deployment/</strong> → Deployment automation scripts for Kubernetes, Terraform infrastructure as code, and shell scripts for deployment and backup.</p>
+
+<p><strong>.github/workflows/</strong> → GitHub Actions CI/CD pipeline definitions for automated testing, building, and deployment.</p>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+
+<h2>8. COMMON FILES & CONFIGURATIONS</h2>
+
+<h3>Environment Files</h3>
+
+<p><strong>.env</strong> → Contains sensitive configuration like database credentials, API keys, and service URLs. Never commit to version control.</p>
+
+<p><strong>.env.example</strong> → Template file showing required environment variables without sensitive values. Commit to repository for team reference.</p>
+
+<h3>Dependency Management</h3>
+
+<p><strong>composer.json</strong> (Backend) → PHP dependencies managed by Composer including Laravel packages and third-party libraries.</p>
+
+<p><strong>package.json</strong> (Frontend) → Node.js dependencies managed by npm/yarn including React, Next.js, Vue.js packages.</p>
+
+<h3>Configuration Files</h3>
+
+<p><strong>docker-compose.yml</strong> → Local development environment configuration with all services (app, database, redis, meilisearch).</p>
+
+<p><strong>docker-compose.prod.yml</strong> → Production environment configuration with optimized settings and service configurations.</p>
+
+<p><strong>.gitignore</strong> → Specifies files and directories to exclude from version control (node_modules, vendor, .env, etc.).</p>
+
+<p><strong>.editorconfig</strong> → Maintains consistent coding styles across different editors and IDEs.</p>
+
+<p><strong>Makefile</strong> → Common commands for development tasks (build, test, deploy, migrate, etc.).</p>
+
+<div class="spacer"></div>
+
+</div>
 </div>
 
 <div class="quick-links">
