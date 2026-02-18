@@ -51,7 +51,28 @@ body{
 .topbar-logo{display:flex;flex-direction:column}
 .topbar-title{font-size:15px;font-weight:700;color:var(--gold);letter-spacing:.4px}
 .topbar-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
-.topbar-author{font-size:11px;color:var(--text-muted);margin-left:8px;white-space:nowrap}
+.topbar-author{
+  font-size:11px;
+  color:var(--gold-light);
+  font-weight:600;
+  margin-left:8px;
+  padding:4px 12px;
+  background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.18));
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:6px;
+  white-space:nowrap;
+  opacity:0;
+  animation:fadeInSlide 0.8s ease-out 0.5s forwards;
+  transition:all 0.3s ease;
+  box-shadow:0 2px 8px rgba(201,168,76,.15);
+}
+.topbar-author:hover{
+  background:linear-gradient(135deg,rgba(201,168,76,.22),rgba(201,168,76,.28));
+  border-color:var(--gold);
+  box-shadow:0 4px 12px rgba(201,168,76,.3);
+  transform:translateY(-1px);
+}
+@keyframes fadeInSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .topbar-badge{
   background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
@@ -91,6 +112,11 @@ body{
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
 .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,.06)}
 .tab-icon{font-size:15px}
+
+/* ── Tab panel animations ── */
+.tab-panel{opacity:0;animation:tabFadeIn 0.4s ease-out forwards}
+@keyframes tabFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tab-panel.active{animation:tabFadeIn 0.4s ease-out forwards}
 
 /* ── Main content ── */
 .main{max-width:1080px;margin:0 auto;padding:28px 24px 80px}
@@ -274,6 +300,7 @@ kbd{
 .quick-links{position:fixed;right:24px;bottom:80px;background:var(--navy-dark);border:1px solid var(--navy-border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;z-index:85;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .quick-btn{width:42px;height:42px;border-radius:6px;border:1px solid var(--navy-border);background:var(--navy-light);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .2s;text-decoration:none}
 .quick-btn:hover{background:var(--gold-dim);color:var(--navy-darkest);border-color:var(--gold);transform:translateY(-2px)}
+.quick-btn.active{background:var(--gold);color:var(--navy-darkest);border-color:var(--gold);transform:scale(1.1);box-shadow:0 0 20px rgba(201,168,76,0.4)}
 .quick-btn-label{position:absolute;right:58px;background:var(--navy-darkest);color:var(--text);padding:6px 10px;border-radius:4px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .quick-btn:hover .quick-btn-label{opacity:1}
 
@@ -704,7 +731,7 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
     <button class="toc-toggle" id="tocToggle" title="Table of Contents (Ctrl+B)">☰</button>
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme (Ctrl+T)">🌙</button>
     <div class="topbar-badge">📄 v2.0 &nbsp;|&nbsp; Feb 2026</div>
-    <div class="topbar-author">Designed by <strong>Mahabubur Rahman (DD)</strong> — Junior Software Engineer</div>
+    <div class="topbar-author">Designed by Mahabubur Rahman (DD) — Junior Software Engineer</div>
   </div>
 </div>
 
@@ -39204,16 +39231,35 @@ let searchMatches = 0;
 // TAB SWITCHING
 // ══════════════════════════════════════
 window.switchTab = function(idx) {
-  document.querySelectorAll('.tab-panel').forEach((p,i) => p.style.display = i===idx?'block':'none');
+  // Hide all panels first
+  document.querySelectorAll('.tab-panel').forEach((p,i) => {
+    if(i === idx) {
+      p.style.display = 'block';
+      // Trigger reflow to restart animation
+      p.style.animation = 'none';
+      setTimeout(() => {
+        p.style.animation = 'tabFadeIn 0.4s ease-out forwards';
+      }, 10);
+    } else {
+      p.style.display = 'none';
+    }
+  });
+  
+  // Update button states
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  
   curTab = idx;
   document.getElementById('searchInput').value = '';
   document.getElementById('searchCounter').textContent = '';
   clearSearch();
   window.scrollTo({top: 0, behavior:'smooth'});
-  buildTOC();
-  wrapCodeBlocks();
-  addAnchorLinks();
+  
+  // Rebuild TOC and wrap code blocks after animation
+  setTimeout(() => {
+    buildTOC();
+    wrapCodeBlocks();
+    addAnchorLinks();
+  }, 100);
 };
 
 // ══════════════════════════════════════
