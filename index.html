@@ -2507,6 +2507,395 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
 <h1>2. SYSTEM ARCHITECTURE OVERVIEW</h1>
 <h2>2.1 Architectural Diagram</h2>
 <div class="spacer"></div>
+
+<h3>Complete Architecture Overview</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                      PRESENTATION LAYER                          │
+│                     (Frontend Applications)                      │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────┐  ┌──────────────────┐  ┌──────────────┐ │
+│   │ Customer Frontend│  │ Vendor Dashboard │  │ Admin Panel  │ │
+│   │                  │  │                  │  │              │ │
+│   │  Next.js/React   │  │   React/Vue      │  │ Vue.js/Vite  │ │
+│   │   Port: 3000     │  │   Port: 3001     │  │ Port: 3002   │ │
+│   └────────┬─────────┘  └────────┬─────────┘  └──────┬───────┘ │
+│            │                     │                    │         │
+└────────────┼─────────────────────┼────────────────────┼─────────┘
+             │                     │                    │
+             │  HTTPS REST API     │  HTTPS REST API    │  HTTPS
+             │                     │                    │
+             └─────────────────────┼────────────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                      API GATEWAY LAYER                           │
+│                 (Nginx / Laravel Gateway)                        │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │               🔒 SSL Termination                         │  │
+│   │            (HTTPS → HTTP Internal)                       │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                             ▼                                    │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │               ⚖️ Load Balancing                          │  │
+│   │         (Distribute across instances)                    │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                             ▼                                    │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │            🔐 Authentication Check                       │  │
+│   │          (JWT / Session Validation)                      │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                             ▼                                    │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │              ⏱️ Rate Limiting                            │  │
+│   │         (Prevent API abuse / DDoS)                       │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                             ▼                                    │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │            🧭 Request Routing                            │  │
+│   │      (Route to appropriate controllers)                  │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                             ▼                                    │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │             🌐 CORS Handling                             │  │
+│   │    (Cross-Origin Resource Sharing rules)                 │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Layer Structure — 4-Tier Architecture</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                    ┌──────────────────────────────┐
+                    │   PRESENTATION LAYER         │
+                    ├──────────────────────────────┤
+                    │ Controllers, Requests,       │
+                    │ Resources, Middleware        │
+                    │                              │
+                    │ Responsibility: HTTP         │
+                    └──────────────┬───────────────┘
+                                   │
+                                   │ depends on
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │      SERVICE LAYER           │
+                    ├──────────────────────────────┤
+                    │ Service Classes, Domain      │
+                    │ Logic, Business Rules        │
+                    │                              │
+                    │ Responsibility: Business     │
+                    └──────────────┬───────────────┘
+                                   │
+                                   │ depends on
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │    REPOSITORY LAYER          │
+                    ├──────────────────────────────┤
+                    │ Repositories, Query          │
+                    │ Builders                     │
+                    │                              │
+                    │ Responsibility: Data         │
+                    └──────────────┬───────────────┘
+                                   │
+                                   │ depends on
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │       DATA LAYER             │
+                    ├──────────────────────────────┤
+                    │ Eloquent Models, Database    │
+                    │ Schema                       │
+                    │                              │
+                    │ Responsibility: Data         │
+                    └──────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Infrastructure Diagram</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                      INTERNET / CDN                              │
+│            (CloudFlare / AWS CloudFront)                         │
+│                                                                  │
+│  • Static Asset Delivery • DDoS Protection                      │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   LOAD BALANCER LAYER                            │
+│               (AWS ALB / DigitalOcean Load Balancer)             │
+│                                                                  │
+│  • Health Checks • SSL Termination                              │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │ WEB SERVER 1 │  │ WEB SERVER 2 │  │ Auto-scaler  │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │  Nginx + PHP │  │  Nginx + PHP │  │  (Monitors)  │
+    │ Docker Host  │  │ Docker Host  │  │   CPU/RAM    │
+    └──────┬───────┘  └──────┬───────┘  └──────────────┘
+           │                 │
+           └────────┬────────┘
+                    │
+                    ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    WEB SERVER CLUSTER                            │
+│           (Application Layer — Multiple Instances)               │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+              ┌────────────────┼─────────────────────┐
+              │                │                     │
+              ▼                ▼                     ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   APPLICATION SERVICES                           │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────────┐                    ┌──────────────────┐   │
+│  │ Database Master  │      Replication   │ Database Replica │   │
+│  ├──────────────────┤ ────────────────►  ├──────────────────┤   │
+│  │ PostgreSQL 15    │                    │  Read Replica    │   │
+│  │ Write Operations │                    │ Read Operations  │   │
+│  └──────────────────┘                    └──────────────────┘   │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              Redis Cluster                               │   │
+│  │           (Master → Replica)                             │   │
+│  ├──────────────────────────────────────────────────────────┤   │
+│  │  • Cache • Sessions                                      │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    ADDITIONAL SERVICES                           │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────┐        ┌──────────────────────┐          │
+│   │  Meilisearch     │        │   Queue Workers      │          │
+│   │  Search Engine   │        │    Supervisor        │          │
+│   └──────────────────┘        └──────────────────────┘          │
+│                                                                  │
+│   ┌────────────────────────────────────────────────────┐        │
+│   │           Scheduled Jobs                           │        │
+│   │      Cron • Laravel Scheduler                      │        │
+│   └────────────────────────────────────────────────────┘        │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                      EXTERNAL SERVICES                           │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐       │
+│   │   AWS S3     │   │  SendGrid    │   │    Stripe    │       │
+│   │   Storage    │   │    Email     │   │   Payment    │       │
+│   └──────────────┘   └──────────────┘   └──────────────┘       │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────┐      │
+│   │        Monitoring Service / Rollbar/Sentry          │      │
+│   └──────────────────────────────────────────────────────┘      │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>AWS Architecture</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                    ┌──────────────────────────────┐
+                    │       ROUTE 53 (DNS)         │
+                    │    domain.com → Load Balancer│
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │    CLIENT ENTRY (CDN)        │
+                    ├──────────────────────────────┤
+                    │ Origin: EC2 (back static addr)│
+                    │ Images: CSS, JS globally cached│
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────┐
+│            APPLICATION LOAD BALANCER (ALB)                       │
+├──────────────────────────────────────────────────────────────────┤
+│  • SSL Termination (HTTPS)                                       │
+│  • Health Checks of Targets                                      │
+│  • Route to Target Group                                         │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    AUTO SCALING GROUP                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐       │
+│   │ EC2 Instance │   │ EC2 Instance │   │ EC2 Instance │       │
+│   │   (Nginx)    │   │   (Nginx)    │   │   (Nginx)    │       │
+│   │  Web + PHP   │   │  Web + PHP   │   │  Web + PHP   │       │
+│   └──────────────┘   └──────────────┘   └──────────────┘       │
+│                                                                  │
+│   Min: 2 instances                                               │
+│   Max: 10 instances                                              │
+│   Scale on: CPU > 70% or Request Count                           │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │ Elasticsearch│  │     REDIS    │  │RDS PostgreSQL│
+    │  (Search)    │  │ (Cache/Queue)│  │  (Database)  │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │ • Full-text  │  │ • Sessions   │  │ • Multi-AZ   │
+    │ • Product    │  │ • Cache      │  │ • Automated  │
+    │   indexing   │  │ • Jobs Queue │  │   Backups    │
+    └──────────────┘  └──────────────┘  └──────────────┘
+
+                    ┌──────────────────────────────┐
+                    │         S3 BUCKETS           │
+                    ├──────────────────────────────┤
+                    │ • Product Images             │
+                    │ • User Uploads               │
+                    │ • Static Assets              │
+                    └──────────────────────────────┘
+
+                    ┌──────────────────────────────┐
+                    │      KEY POSTGRESQL          │
+                    ├──────────────────────────────┤
+                    │ • Mult-AZ Deployment (Master)│
+                    │ • Read Replicas for scale    │
+                    │ • Automatic Failover         │
+                    └──────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Security Layers Diagram</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│        LAYER 1: PERIMETER SECURITY                               │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   • CloudFlare DDoS Protection                                   │
+│   • WAF (Web Application Firewall)                               │
+│                                                                  │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ Protected by
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│        LAYER 2: NETWORK SECURITY                                 │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   • TLS 1.3 Encryption (HTTPS only)                              │
+│   • Security Groups / Firewall Rules                             │
+│                                                                  │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ Secured by
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│        LAYER 3: APPLICATION SECURITY                             │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   • Authentication (JWT / Session Tokens)                        │
+│   • Authorization (RBAC)                                         │
+│                                                                  │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ Encrypts with
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│        LAYER 4: DATA SECURITY                                    │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   • Encryption at Rest (AES-256)                                 │
+│   • Encryption in Transit (TLS)                                  │
+│                                                                  │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ Monitored by
+                               ▼
+┌──────────────────────────────────────────────────────────────────┐
+│        LAYER 5: MONITORING & RESPONSE                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   • Security Event Logging                                       │
+│   • Intrusion Detection (Fail2Ban)                               │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Blue-Green Deployment Diagram</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                    ┌──────────────────────────────┐
+                    │      LOAD BALANCER           │
+                    │  (Traffic Router / Switch)   │
+                    └──────────────┬───────────────┘
+                                   │
+                  Active: 100%     │     Inactive: 0%
+              ┌───────────────────┴────────────────────┐
+              │                                        │
+              ▼                                        ▼
+┌──────────────────────────┐           ┌──────────────────────────┐
+│   BLUE ENVIRONMENT       │           │   GREEN ENVIRONMENT      │
+│      (v1.2.3)            │           │      (v1.2.4)            │
+├──────────────────────────┤           ├──────────────────────────┤
+│                          │           │                          │
+│  • Web Servers           │           │  • Web Servers           │
+│                          │           │                          │
+│  • PHP-FPM               │           │  • PHP-FPM               │
+│                          │           │                          │
+│  • Queue Workers         │           │  • Queue Workers         │
+│                          │           │                          │
+└──────────────────────────┘           └──────────────────────────┘
+              │                                        │
+              │                                        │
+              └────────────┬───────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                   SHARED INFRASTRUCTURE                          │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │         Database (PostgreSQL)                            │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │         Cache (Redis)                                    │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │         Storage (S3)                                     │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │         Search (Meilisearch)                             │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+DEPLOYMENT FLOW:
+
+1. Deploy new version (v1.2.4) to GREEN environment
+2. Run automated tests on GREEN
+3. Manual QA testing on GREEN
+4. Switch load balancer: 100% traffic → GREEN
+5. Monitor GREEN for issues
+6. If issues: Switch back to BLUE (instant rollback)
+7. If stable: Keep GREEN as active, update BLUE with next version
+</code></pre></div>
+
+<div class="spacer"></div>
 <h2>2.2 Component Interaction Flow</h2>
 <p>Customer Product Search Flow</p>
 <p>Customer Browser</p>
@@ -9340,6 +9729,499 @@ Color coding:
 <div class="spacer"></div>
 <h1>2. DATABASE OVERVIEW</h1>
 <h2>2.1 Logical Database Architecture</h2>
+<div class="spacer"></div>
+
+<h1>E-COMMERCE PLATFORM - ER DIAGRAM & OPTIMIZATION GUIDE</h1>
+
+<div class="spacer"></div>
+<h2>ENTITY RELATIONSHIP DIAGRAM (ERD)</h2>
+<p><strong>Complete ER Diagram — 7 Sections, 65+ Tables</strong></p>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│              E-COMMERCE PLATFORM - MODULE OVERVIEW               │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │           E-COMMERCE PLATFORMS                             │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • website_logo    • title    • website_icon               │ │
+│  │  • tagline         • settings                              │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │              COMMUNICATION                                 │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • notifications   • messages   • email_queue              │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │                    FINANCIAL                               │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • commissions    • payouts    • transactions              │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │                   MARKETING                                │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • coupons   • coupon_usage   • banners   • flash_deals    │ │
+│  │  • analytics_insights                                       │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │                   INVENTORY                                │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • inventory_movements     • stock_notifications           │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │               ORDER MANAGEMENT                             │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • orders   • order_items   • payments   • shipments       │ │
+│  │  • refunds  • returns                                       │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │               PRODUCT CATALOG                              │ │
+│  ├────────────────────────────────────────────────────────────┤ │
+│  │  • categories   • products   • product_images              │ │
+│  │  • product_variants   • product_attributes                 │ │
+│  │  • product_templates                                        │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>LEGEND</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+LEGEND:
+  [PK] = Primary Key
+  [FK] = Foreign Key
+  ─── = One-to-Many Relationship
+  === = Many-to-Many Relationship
+  ●   = Required Field
+  ○   = Optional Field
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 1: USER MANAGEMENT</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                    ┌──────────────────┐
+                    │      users       │
+                    ├──────────────────┤
+                    │ ● id [PK]        │
+                    │ ● email          │
+                    │ ● password       │
+                    │ ● first_name     │
+                    │ ● last_name      │
+                    │ ○ phone          │
+                    │ ● user_type      │
+                    │ ● status         │
+                    │ ○ two_factor_ena.│
+                    └────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+    ┌──────────────────┐ ┌──────────────┐ ┌──────────────┐
+    │ user_addresses   │ │user_sessions │ │  user_roles  │
+    ├──────────────────┤ ├──────────────┤ ├──────────────┤
+    │ ● id [PK]        │ │ ● id [PK]    │ │ ● id [PK]    │
+    │ ● user_id [FK] ──┤ │ ● user_id[FK]│ │ ● user_id[FK]│
+    │ ● address_type   │ │ ● session_tok│ │ ● role_id[FK]│───┐
+    │ ● full_name      │ │ ● ip_address │ └──────────────┘   │
+    │ ● address_line1  │ │ ○ user_agent │                    │
+    │ ● city           │ │ ● last_activ.│                    │
+    └──────────────────┘ └──────────────┘                    │
+                                                              │
+                             ┌────────────────────────────────┘
+                             │
+                             ▼
+              ┌──────────────────────────┐
+              │         roles            │
+              ├──────────────────────────┤
+              │ ● id [PK]                │
+              │ ● name                   │
+              │ ● display_name           │
+              └────────┬─────────────────┘
+                       │
+                       │ Many-to-Many
+                       ▼
+              ┌──────────────────────────┐
+              │   role_permissions       │
+              ├──────────────────────────┤
+              │ ● id [PK]                │
+              │ ● role_id [FK]           │
+              │ ● permission_id [FK] ────┼─────┐
+              └──────────────────────────┘     │
+                                               │
+                                               ▼
+                             ┌──────────────────────────┐
+                             │     permissions          │
+                             ├──────────────────────────┤
+                             │ ● id [PK]                │
+                             │ ● name                   │
+                             │ ● module                 │
+                             └──────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 2: VENDOR STRUCTURE</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+            ┌──────────────────┐
+            │      users       │
+            │ (user_type:      │
+            │   vendor)        │
+            └────────┬─────────┘
+                     │ 1:1
+                     ▼
+            ┌──────────────────┐
+            │     vendors      │
+            ├──────────────────┤
+            │ ● id [PK]        │
+            │ ● user_id [FK] ──┼───────────┐
+            │ ● store_name     │           │
+            │ ● store_slug     │           │
+            │ ● business_name  │           │
+            │ ● tax_id         │           │
+            │ ● commission_rate│           │
+            │ ● status         │           │
+            └────────┬─────────┘           │
+                     │                     │
+        ┌────────────┼──────────┐          │
+        │            │          │          │
+        ▼            ▼          ▼          │
+┌─────────────┐ ┌─────────┐ ┌──────────────────┐
+│vendor_bank_ │ │products │ │ vendor_payouts   │
+│ accounts    │ ├─────────┤ ├──────────────────┤
+├─────────────┤ │● id [PK]│ │ ● id [PK]        │
+│● id [PK]    │ │●vendor_id│ │ ● vendor_id [FK] │
+│●vendor_id[FK│ │● name   │ │ ● payout_ref.    │
+│●account_num │ │● price  │ │ ● gross_amount   │
+│●bank_name   │ │● stock  │ │ ● commission_amt │
+│○is_verified │ └─────────┘ │ ● net_amount     │
+└─────────────┘             │ ● status         │
+                            └──────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 3: PRODUCT CATALOG</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+        ┌──────────────────┐
+        │   categories     │
+        ├──────────────────┤
+        │ ● id [PK]        │
+    ┌───│ ○ parent_id [FK] │ (Self-referencing)
+    │   │ ● name           │
+    │   │ ● slug           │
+    │   │ ○ icon           │
+    │   └────────┬─────────┘
+    │            │
+    └────────────┘
+         Self-referencing
+         (parent-child)
+
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │    products      │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● vendor_id [FK] │
+        │ ● category_id[FK]│────┐
+        │ ● name           │    │
+        │ ● slug           │    │
+        │ ● sku            │    │
+        │ ● price          │    │
+        │ ○ sale_price     │    │
+        │ ● stock_quantity │    │
+        │ ● status         │    │
+        │ ○ rating_average │    │
+        └────────┬─────────┘    │
+                 │              │
+      ┌──────────┼──────────┐   │
+      │          │          │   │
+      ▼          ▼          ▼   │
+┌─────────────┐ ┌──────────────┐ ┌──────────────────┐
+│product_     │ │product_      │ │product_attributes│
+│ images      │ │ variants     │ ├──────────────────┤
+├─────────────┤ ├──────────────┤ │ ● id [PK]        │
+│● id [PK]    │ │● id [PK]     │ │ ● product_id [FK]│
+│●product_id  │ │●product_id   │ │ ● attribute_id[FK│──┐
+│  [FK]       │ │  [FK]        │ │ ○ custom_value   │  │
+│●image_url   │ │● sku         │ └──────────────────┘  │
+│○is_primary  │ │● price       │                       │
+└─────────────┘ │●stock_quant. │           ┌───────────┘
+                └────┬─────────┘           │
+                     │                     │
+                     │ 1:N                 ▼
+                     ▼            ┌──────────────────┐
+        ┌────────────────────┐   │   attributes     │
+        │product_variant_    │   ├──────────────────┤
+        │    attributes      │   │ ● id [PK]        │
+        ├────────────────────┤   │ ● name           │
+        │ ● id [PK]          │   │ ● type           │
+        │ ● variant_id [FK]  │   │ ● is_global      │
+        │ ● attribute_id [FK]│───┤ └──────┬───────────┘
+        │ ●attribute_value_id│   │        │
+        │   [FK]             │───┘        │ 1:N
+        └────────────────────┘            │
+                                          ▼
+                             ┌──────────────────────┐
+                             │ attribute_values     │
+                             ├──────────────────────┤
+                             │ ● id [PK]            │
+                             │ ● attribute_id [FK]  │
+                             │ ● value              │
+                             │ ○ color_code         │
+                             └──────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 4: ORDER MANAGEMENT</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+            ┌──────────────────┐
+            │      users       │
+            └────────┬─────────┘
+                     │ 1:N
+                     ▼
+            ┌──────────────────┐
+            │      orders      │
+            ├──────────────────┤
+            │ ● id [PK]        │
+            │ ● order_number   │
+            │ ○ user_id [FK]   │
+            │ ○ guest_email    │
+            │ ● subtotal       │
+            │ ● total_amount   │
+            │ ● status         │
+            │ ● payment_status │
+            │ ○ coupon_code    │
+            └────────┬─────────┘
+                     │
+        ┌────────────┼──────────┐
+        │            │          │
+        ▼            ▼          ▼
+┌────────────────┐ ┌──────────────┐ ┌──────────────────┐
+│order_status_   │ │order_items   │ │order_addresses   │
+│   history      │ ├──────────────┤ ├──────────────────┤
+├────────────────┤ │● id [PK]     │ │ ● id [PK]        │
+│● id [PK]       │ │●order_id [FK]│ │ ● order_id [FK]  │
+│●order_id [FK]  │ │●product_id   │ │ ● full_name      │
+│○old_status     │ │  [FK]        │ │ ● address_line1  │
+│●new_status     │ │○variant_id   │ │ ● city           │
+│●comment        │ │  [FK]        │ └──────────────────┘
+└────────────────┘ │●vendor_id[FK]│
+                   │●quantity     │            1:1
+                   │●unit_price   │            │
+                   │●total        │            ▼
+                   │●commission_  │   ┌──────────────────┐
+                   │  amount      │   │   shipments      │
+                   │●vendor_earn. │   ├──────────────────┤
+                   └──────────────┘   │ ● id [PK]        │
+                                      │ ● order_id [FK]  │
+        ┌──────────────────┐          │ ● shipment_number│
+        │   order_notes    │          │ ● carrier        │
+        ├──────────────────┤          │ ○ tracking_number│
+        │ ● id [PK]        │          │ ● status         │
+        │ ● order_id [FK] ─┘          └────────┬─────────┘
+        │ ● note           │                   │
+        │ ○is_customer_note│                   │ 1:N
+        └──────────────────┘                   ▼
+                                      ┌──────────────────┐
+        ┌──────────────────┐          │ shipment_items   │
+        │     refunds      │          ├──────────────────┤
+        ├──────────────────┤          │ ● id [PK]        │
+        │ ● id [PK]        │          │ ● shipment_id[FK]│
+        │ ● order_id [FK] ─┘          │ ● order_item_id  │
+        │ ● refund_number  │          │   [FK]           │
+        │ ● refund_amount  │          │ ● quantity       │
+        │ ● status         │          └──────────────────┘
+        │ ● reason         │
+        └────────┬─────────┘
+                 │
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │  refund_items    │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● refund_id [FK] │
+        │ ● order_item_id  │
+        │   [FK]           │
+        │ ● quantity       │
+        └──────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 5: REVIEWS & RATINGS</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+        ┌──────────────────┐
+        │    products      │
+        └────────┬─────────┘
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │     reviews      │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● product_id [FK]│
+        │ ● user_id [FK]   │
+        │ ○ order_id [FK]  │
+        │ ● rating         │
+        │ ● review_text    │
+        │ ● status         │
+        │ ○ is_verified    │
+        └────────┬─────────┘
+                 │
+      ┌──────────┼──────────┐
+      │          │          │
+      ▼          ▼          ▼
+┌─────────────┐ ┌──────────────┐ ┌──────────────────┐
+│review_      │ │review_       │ │  review_votes    │
+│ images      │ │ responses    │ ├──────────────────┤
+├─────────────┤ ├──────────────┤ │ ● id [PK]        │
+│● id [PK]    │ │● id [PK]     │ │ ● review_id [FK] │
+│●review_id   │ │●review_id[FK]│ │ ● user_id [FK]   │
+│  [FK]       │ │●responder_id │ │ ● vote           │
+│●image_url   │ │  [FK]        │ └──────────────────┘
+└─────────────┘ │●response_text│
+                │●responder_id │
+                │  [FK]        │
+                └──────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 6: PROMOTIONS & MARKETING</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+        ┌──────────────────┐
+        │     coupons      │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ○ vendor_id [FK] │
+        │ ● code           │
+        │ ● discount_type  │
+        │ ● discount_value │
+        │ ○min_order_amount│
+        │ ● valid_from     │
+        │ ● valid_until    │
+        └────────┬─────────┘
+                 │
+      ┌──────────┼──────────┐
+      │          │          │
+      ▼          ▼          ▼
+┌─────────────┐ ┌──────────────┐ ┌──────────────────┐
+│coupon_usage │ │coupon_       │ │coupon_categories │
+├─────────────┤ │ products     │ ├──────────────────┤
+│● id [PK]    │ ├──────────────┤ │ ● id [PK]        │
+│●coupon_id   │ │● id [PK]     │ │ ● coupon_id [FK] │
+│  [FK]       │ │●coupon_id[FK]│ │ ● category_id    │
+│●order_id[FK]│ │●product_id   │ └──────────────────┘
+│○user_id [FK]│ │  [FK]        │
+│●discount_amt│ └──────────────┘
+└─────────────┘
+
+        ┌──────────────────┐
+        │   promotions     │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ○ vendor_id [FK] │
+        │ ● name           │
+        │ ● type           │
+        │ ○ discount_value │
+        │ ● starts_at      │
+        └────────┬─────────┘
+                 │
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │ promotion_       │
+        │   products       │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● promotion_id   │
+        │   [FK]           │
+        │ ● product_id [FK]│
+        └──────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>SECTION 7: INVENTORY TRACKING</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+        ┌──────────────────┐
+        │    products      │
+        └────────┬─────────┘
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │ inventory_logs   │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● product_id [FK]│
+        │ ○ variant_id [FK]│
+        │ ● type           │
+        │ ● quantity_before│
+        │ ● quantity_change│
+        │ ● quantity_after │
+        │ ○ reference_type │
+        │ ○ reference_id   │
+        └──────────────────┘
+
+        ┌──────────────────┐
+        │   warehouses     │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● vendor_id [FK] │
+        │ ● name           │
+        │ ● code           │
+        │ ● address        │
+        └────────┬─────────┘
+                 │
+                 │ 1:N
+                 ▼
+        ┌──────────────────┐
+        │ warehouse_       │
+        │   inventory      │
+        ├──────────────────┤
+        │ ● id [PK]        │
+        │ ● warehouse_id   │
+        │   [FK]           │
+        │ ● product_id [FK]│
+        │ ○ variant_id [FK]│
+        │ ● quantity       │
+        │ ● reserved_quant.│
+        └──────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h2>VENDOR MANAGEMENT & USER MANAGEMENT</h2>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                   VENDOR MANAGEMENT                              │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │            • vendors                                     │  │
+│   │            • vendor_bank_accounts                        │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    USER MANAGEMENT                               │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │            • user                                        │  │
+│   │            • addresses                                   │  │
+│   │            • sessions                                    │  │
+│   │            • permissions_users                           │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
 <div class="spacer"></div>
 <p>Database টা ৮টা main modules এ divided:</p>
 <h1>1. User Management - Customer, vendor, admin accounts</h1>
