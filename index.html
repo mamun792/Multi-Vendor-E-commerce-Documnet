@@ -21118,70 +21118,142 @@ class ProductResource extends JsonResource
 <h1>1. DESIGN PATTERNS FOR E-COMMERCE PLATFORM</h1>
 <h2>1.1 Overview of Patterns Used</h2>
 <div class="spacer"></div>
-<h1>2. OOP PRINCIPLES &amp; IMPLEMENTATION</h1>
+
+<h3>Design Patterns Architecture</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│              DESIGN PATTERNS ARCHITECTURE                        │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
+│  │ CREATIONAL   │  │ STRUCTURAL   │  │    BEHAVIORAL        │  │
+│  ├──────────────┤  ├──────────────┤  ├──────────────────────┤  │
+│  │              │  │              │  │                      │  │
+│  │ • Factory    │  │ • Adapter    │  │ • Strategy           │  │
+│  │ • Singleton  │  │ • Facade     │  │ • Observer           │  │
+│  │ • Builder    │  │ • Decorator  │  │ • Chain of           │  │
+│  │              │  │ • Repository │  │   Responsibility     │  │
+│  │              │  │              │  │                      │  │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+CREATIONAL PATTERNS:
+  • Factory    → Create objects without specifying exact class
+  • Singleton  → Ensure only one instance exists
+  • Builder    → Construct complex objects step-by-step
+
+STRUCTURAL PATTERNS:
+  • Adapter    → Convert interface to another interface
+  • Facade     → Provide simplified interface to complex subsystem
+  • Decorator  → Add behavior to objects dynamically
+  • Repository → Separate data access logic from business logic
+
+BEHAVIORAL PATTERNS:
+  • Strategy   → Define family of algorithms, make them interchangeable
+  • Observer   → Notify multiple objects when state changes
+  • Chain of Responsibility → Pass request through chain of handlers
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>OOP & Pattern Usage Summary</h3>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│           OOP & PATTERN USAGE SUMMARY                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  OOP CONCEPTS:                                                   │
+│   ✅ Encapsulation    → User, Payment, Product                  │
+│   ✅ Inheritance      → User Types, Product Types                │
+│   ✅ Polymorphism     → Payment, Notification, Report            │
+│   ✅ Abstraction      → Gateway, Storage, Search                 │
+│   ✅ Interface        → Payable, Searchable, Notifiable          │
+│                                                                  │
+│  CREATIONAL:                                                     │
+│   ✅ Singleton        → DB, Cache, Config, Logger                │
+│   ✅ Factory          → Payment, Product, Notification           │
+│   ✅ Builder          → Order, Query, Email, Report              │
+│   ✅ Prototype        → Product Clone, Promotion Copy            │
+│                                                                  │
+│  STRUCTURAL:                                                     │
+│   ✅ Adapter          → Payment APIs, Shipping APIs              │
+│   ✅ Decorator        → Price, Product, Permission               │
+│   ✅ Facade           → Order, Checkout, Search                  │
+│   ✅ Proxy            → Cache, Auth, Rate Limit                  │
+│   ✅ Composite        → Category Tree, Menu Tree                 │
+│                                                                  │
+│  BEHAVIORAL:                                                     │
+│   ✅ Observer         → Order, Payment, Inventory                │
+│   ✅ Strategy         → Payment, Pricing, Shipping               │
+│   ✅ Command          → Order, Cart, Inventory                   │
+│   ✅ Chain of Resp.   → Validation, Permission, Payment          │
+│   ✅ State            → Order, Vendor, Product states            │
+│   ✅ Template Method  → Report, Notification, Export             │
+│   ✅ Repository       → Product, Order, User, Vendor             │
+│                                                                  │
+│  TOTAL: 5 OOP + 12 Design Patterns = 17 Concepts                │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h1>2. OOP PRINCIPLES & IMPLEMENTATION</h1>
 <h2>2.1 Four Pillars of OOP</h2>
-<p>Encapsulation (Encapsulation)</p>
-<p>&lt;?php</p>
-<p>// ✅ GOOD - Proper encapsulation</p>
-<div class="spacer"></div>
-<p>namespace App\Models;</p>
-<div class="spacer"></div>
-<p>class Order</p>
-<p>{</p>
-<p>// Private properties - cannot be accessed directly</p>
-<pre><code class="language-php hljs-custom">    private float $subtotal;
+
+<h3>Encapsulation (Encapsulation)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// ✅ GOOD - Proper encapsulation
+
+namespace App\Models;
+
+class Order
+{
+    // Private properties - cannot be accessed directly
+    private float $subtotal;
     private float $tax;
     private float $shipping;
     private float $discount;
     private float $total;
 
-
     // Public getters - controlled access
     public function getSubtotal(): float
     {
-        return $this-&gt;subtotal;
+        return $this->subtotal;
     }
-
 
     public function getTotal(): float
     {
-        return $this-&gt;total;
+        return $this->total;
     }
-
 
     // Public setters with validation - controlled modification
     public function setDiscount(float $discount): void
     {
-        if ($discount &lt; 0) {
-            throw new \InvalidArgumentException(&#x27;Discount cannot be negative&#x27;);
+        if ($discount < 0) {
+            throw new \InvalidArgumentException('Discount cannot be negative');
         }
 
-
-        if ($discount &gt; $this-&gt;subtotal) {
-            throw new \InvalidArgumentException(&#x27;Discount cannot exceed subtotal&#x27;);
+        if ($discount > $this->subtotal) {
+            throw new \InvalidArgumentException('Discount cannot exceed subtotal');
         }
 
-
-        $this-&gt;discount = $discount;
-        $this-&gt;recalculateTotal();
+        $this->discount = $discount;
+        $this->recalculateTotal();
     }
-
 
     // Private helper method - internal logic hidden
     private function recalculateTotal(): void
     {
-        $this-&gt;total = $this-&gt;subtotal + $this-&gt;tax + $this-&gt;shipping - $this-&gt;discount;
+        $this->total = $this->subtotal + $this->tax + $this->shipping - $this->discount;
     }
-
 
     // Public method for applying coupon - business logic encapsulated
     public function applyCoupon(Coupon $coupon): void
     {
-        $discount = $coupon-&gt;calculateDiscount($this-&gt;subtotal);
-        $this-&gt;setDiscount($discount);
+        $discount = $coupon->calculateDiscount($this->subtotal);
+        $this->setDiscount($discount);
     }
 }
-
 
 // ❌ BAD - No encapsulation
 class BadOrder
@@ -21190,18 +21262,17 @@ class BadOrder
     public $tax;
     public $total;
 
-
     // Anyone can set invalid values
-    // $order-&gt;total = -100; // No validation!
+    // $order->total = -100; // No validation!
 }
-Inheritance (উত্তরাধিকার)
-php
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Inheritance (উত্তরাধিকার)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // Base class for all payment methods
 
-
 namespace App\Services\Payment;
-
 
 abstract class PaymentGateway
 {
@@ -21209,52 +21280,46 @@ abstract class PaymentGateway
     protected float $amount;
     protected string $currency;
 
-
     // Template method pattern
     final public function processPayment(Order $order): PaymentResult
     {
-        $this-&gt;validateOrder($order);
-        $this-&gt;initializeTransaction($order);
+        $this->validateOrder($order);
+        $this->initializeTransaction($order);
         
-        $result = $this-&gt;executePayment();
+        $result = $this->executePayment();
         
-        $this-&gt;logTransaction($result);
-        $this-&gt;notifyCustomer($result);
+        $this->logTransaction($result);
+        $this->notifyCustomer($result);
         
         return $result;
     }
 
-
     // Common validation for all payment methods
     protected function validateOrder(Order $order): void
     {
-        if ($order-&gt;total &lt;= 0) {
-            throw new \InvalidArgumentException(&#x27;Invalid order amount&#x27;);
+        if ($order->total <= 0) {
+            throw new \InvalidArgumentException('Invalid order amount');
         }
 
-
-        if (!$order-&gt;isPaid()) {
-            throw new \RuntimeException(&#x27;Order already paid&#x27;);
+        if ($order->isPaid()) {
+            throw new \RuntimeException('Order already paid');
         }
     }
-
 
     // Abstract methods - must be implemented by child classes
     abstract protected function executePayment(): PaymentResult;
     abstract protected function refund(float $amount): RefundResult;
 
-
     // Common logging
     protected function logTransaction(PaymentResult $result): void
     {
-        \Log::info(&#x27;Payment processed&#x27;, [
-            &#x27;gateway&#x27; =&gt; get_class($this),
-            &#x27;transaction_id&#x27; =&gt; $this-&gt;transactionId,
-            &#x27;amount&#x27; =&gt; $this-&gt;amount,
-            &#x27;status&#x27; =&gt; $result-&gt;status,
+        \Log::info('Payment processed', [
+            'gateway' => get_class($this),
+            'transaction_id' => $this->transactionId,
+            'amount' => $this->amount,
+            'status' => $result->status,
         ]);
     }
-
 
     protected function notifyCustomer(PaymentResult $result): void
     {
@@ -21262,53 +21327,45 @@ abstract class PaymentGateway
     }
 }
 
-
 // Child class - Stripe implementation
 class StripePaymentGateway extends PaymentGateway
 {
     private \Stripe\StripeClient $stripe;
 
-
     public function __construct()
     {
-        $this-&gt;stripe = new \Stripe\StripeClient(config(&#x27;services.stripe.secret&#x27;));
+        $this->stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
     }
-
 
     protected function executePayment(): PaymentResult
     {
         try {
-            $paymentIntent = $this-&gt;stripe-&gt;paymentIntents-&gt;create([
-                &#x27;amount&#x27; =&gt; $this-&gt;amount * 100,
-                &#x27;currency&#x27; =&gt; $this-&gt;currency,
+            $paymentIntent = $this->stripe->paymentIntents->create([
+                'amount' => $this->amount * 100,
+                'currency' => $this->currency,
             ]);
 
-
-            $this-&gt;transactionId = $paymentIntent-&gt;id;
-
+            $this->transactionId = $paymentIntent->id;
 
             return new PaymentResult(
                 success: true,
-                transactionId: $paymentIntent-&gt;id,
-                status: $paymentIntent-&gt;status
+                transactionId: $paymentIntent->id,
+                status: $paymentIntent->status
             );
-
 
         } catch (\Exception $e) {
             return new PaymentResult(
                 success: false,
-                message: $e-&gt;getMessage()
+                message: $e->getMessage()
             );
         }
     }
-
 
     protected function refund(float $amount): RefundResult
     {
         // Stripe-specific refund logic
     }
 }
-
 
 // Child class - SSLCommerz implementation
 class SSLCommerzPaymentGateway extends PaymentGateway
@@ -21318,17 +21375,17 @@ class SSLCommerzPaymentGateway extends PaymentGateway
         // SSLCommerz-specific payment logic
     }
 
-
     protected function refund(float $amount): RefundResult
     {
         // SSLCommerz-specific refund logic
     }
 }
-Polymorphism (বহুরূপতা)
-php
-&lt;?php
-namespace App\Services\Shipping;
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>Polymorphism (বহুরূপতা)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+namespace App\Services\Shipping;
 
 // Interface defines contract
 interface ShippingProvider
@@ -21338,31 +21395,27 @@ interface ShippingProvider
     public function createShipment(Order $order): Shipment;
 }
 
-
 // Different implementations
 class FedExShipping implements ShippingProvider
 {
     public function calculateCost(Order $order): float
     {
-        $weight = $order-&gt;getTotalWeight();
-        $distance = $this-&gt;calculateDistance($order-&gt;shippingAddress);
+        $weight = $order->getTotalWeight();
+        $distance = $this->calculateDistance($order->shippingAddress);
         
         return $weight * 0.5 + $distance * 0.1 + 5.00;
     }
 
-
     public function estimateDelivery(Order $order): \Carbon\Carbon
     {
-        return now()-&gt;addDays(3);
+        return now()->addDays(3);
     }
-
 
     public function createShipment(Order $order): Shipment
     {
         // FedEx API call
     }
 }
-
 
 class DHLShipping implements ShippingProvider
 {
@@ -21527,10 +21580,12 @@ class SSLCommerzPaymentGateway extends PaymentGateway
         // SSLCommerz-specific refund logic
     }
 }
-Polymorphism (বহুরূপতা)
-php&lt;?php
-namespace App\Services\Shipping;
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>Polymorphism (বহুরূপতা)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+namespace App\Services\Shipping;
 
 // Interface defines contract
 interface ShippingProvider
@@ -21540,24 +21595,21 @@ interface ShippingProvider
     public function createShipment(Order $order): Shipment;
 }
 
-
 // Different implementations
 class FedExShipping implements ShippingProvider
 {
     public function calculateCost(Order $order): float
     {
-        $weight = $order-&gt;getTotalWeight();
-        $distance = $this-&gt;calculateDistance($order-&gt;shippingAddress);
+        $weight = $order->getTotalWeight();
+        $distance = $this->calculateDistance($order->shippingAddress);
         
         return $weight * 0.5 + $distance * 0.1 + 5.00;
     }
 
-
     public function estimateDelivery(Order $order): \Carbon\Carbon
     {
-        return now()-&gt;addDays(3);
+        return now()->addDays(3);
     }
-
 
     public function createShipment(Order $order): Shipment
     {
@@ -21565,28 +21617,24 @@ class FedExShipping implements ShippingProvider
     }
 }
 
-
 class DHLShipping implements ShippingProvider
 {
     public function calculateCost(Order $order): float
     {
         // Different calculation logic
-        return $order-&gt;getTotalWeight() * 0.6 + 10.00;
+        return $order->getTotalWeight() * 0.6 + 10.00;
     }
-
 
     public function estimateDelivery(Order $order): \Carbon\Carbon
     {
-        return now()-&gt;addDays(2); // Faster delivery
+        return now()->addDays(2); // Faster delivery
     }
-
 
     public function createShipment(Order $order): Shipment
     {
         // DHL API call
     }
 }
-
 
 class LocalDelivery implements ShippingProvider
 {
@@ -21601,13 +21649,17 @@ class LocalDelivery implements ShippingProvider
         return now()-&gt;addDay(); // Same-day or next-day
     }
 
+
+    public function estimateDelivery(Order $order): \Carbon\Carbon
+    {
+        return now()->addDay(); // Same day
+    }
 
     public function createShipment(Order $order): Shipment
     {
         // Local delivery system
     }
 }
-
 
 // Usage - Polymorphism in action
 class ShippingService
@@ -21616,31 +21668,30 @@ class ShippingService
         private ShippingProvider $provider // Can accept ANY implementation
     ) {}
 
-
     public function shipOrder(Order $order): void
     {
         // Works with ANY shipping provider
-        $cost = $this-&gt;provider-&gt;calculateCost($order);
-        $estimatedDelivery = $this-&gt;provider-&gt;estimateDelivery($order);
-        $shipment = $this-&gt;provider-&gt;createShipment($order);
+        $cost = $this->provider->calculateCost($order);
+        $estimatedDelivery = $this->provider->estimateDelivery($order);
+        $shipment = $this->provider->createShipment($order);
 
-
-        $order-&gt;update([
-            &#x27;shipping_cost&#x27; =&gt; $cost,
-            &#x27;estimated_delivery&#x27; =&gt; $estimatedDelivery,
+        $order->update([
+            'shipping_cost' => $cost,
+            'estimated_delivery' => $estimatedDelivery,
         ]);
     }
 }
-
 
 // Easy to switch providers
 $service = new ShippingService(new FedExShipping());
 $service = new ShippingService(new DHLShipping());
 $service = new ShippingService(new LocalDelivery());
-Abstraction (বিমূর্ততা)
-php&lt;?php
-namespace App\Services\Notification;
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>Abstraction (বিমূর্ততা)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+namespace App\Services\Notification;
 
 // Abstract interface - hides complexity
 interface NotificationChannel
@@ -21648,31 +21699,28 @@ interface NotificationChannel
     public function send(User $user, string $message): bool;
 }
 
-
 // Concrete implementations
 class EmailNotification implements NotificationChannel
 {
     public function send(User $user, string $message): bool
     {
         // Complex email sending logic hidden
-        Mail::to($user-&gt;email)-&gt;send(new GenericNotification($message));
+        Mail::to($user->email)->send(new GenericNotification($message));
         return true;
     }
 }
-
 
 class SMSNotification implements NotificationChannel
 {
     public function send(User $user, string $message): bool
     {
         // Complex SMS logic hidden
-        $this-&gt;twilioClient-&gt;messages-&gt;create($user-&gt;phone, [
-            &#x27;body&#x27; =&gt; $message,
+        $this->twilioClient->messages->create($user->phone, [
+            'body' => $message,
         ]);
         return true;
     }
 }
-
 
 class PushNotification implements NotificationChannel
 {
@@ -21683,23 +21731,20 @@ class PushNotification implements NotificationChannel
     }
 }
 
-
 // Service that uses abstraction
 class NotificationService
 {
     private array $channels = [];
 
-
     public function addChannel(NotificationChannel $channel): void
     {
-        $this-&gt;channels[] = $channel;
+        $this->channels[] = $channel;
     }
-
 
     public function notifyUser(User $user, string $message): void
     {
-        // User doesn&#x27;t need to know HOW notifications are sent
-        foreach ($this-&gt;channels as $channel) {
+        // User doesn't need to know HOW notifications are sent
+        foreach ($this->channels as $channel) {
             $channel-&gt;send($user, $message);
         }
     }
@@ -22007,21 +22052,23 @@ class OrderService
         return $order;
     }
 }
-3.2 Open/Closed Principle (OCP)
-&lt;?php
-// Open for extension, Closed for modification
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>3.2 Open/Closed Principle (OCP)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// Open for extension, Closed for modification
 
 // ❌ BAD - Need to modify class to add new discount types
 class DiscountCalculator
 {
     public function calculate(Order $order, string $type): float
     {
-        if ($type === &#x27;percentage&#x27;) {
-            return $order-&gt;subtotal * 0.10;
-        } elseif ($type === &#x27;fixed&#x27;) {
+        if ($type === 'percentage') {
+            return $order->subtotal * 0.10;
+        } elseif ($type === 'fixed') {
             return 50.00;
-        } elseif ($type === &#x27;buy_one_get_one&#x27;) {
+        } elseif ($type === 'buy_one_get_one') {
             // Complex logic
         }
         // Need to modify THIS class to add new types ❌
@@ -22035,20 +22082,17 @@ interface DiscountStrategy
     public function calculate(Order $order): float;
 }
 
-
 class PercentageDiscount implements DiscountStrategy
 {
     public function __construct(
         private float $percentage
     ) {}
 
-
     public function calculate(Order $order): float
     {
-        return $order-&gt;subtotal * ($this-&gt;percentage / 100);
+        return $order->subtotal * ($this->percentage / 100);
     }
 }
-
 
 class FixedAmountDiscount implements DiscountStrategy
 {
@@ -22056,68 +22100,61 @@ class FixedAmountDiscount implements DiscountStrategy
         private float $amount
     ) {}
 
-
     public function calculate(Order $order): float
     {
-        return min($this-&gt;amount, $order-&gt;subtotal);
+        return min($this->amount, $order->subtotal);
     }
 }
-
 
 class BuyOneGetOneDiscount implements DiscountStrategy
 {
     public function calculate(Order $order): float
     {
         $discount = 0;
-        foreach ($order-&gt;items as $item) {
-            if ($item-&gt;quantity &gt;= 2) {
-                $discount += $item-&gt;unit_price * floor($item-&gt;quantity / 2);
+        foreach ($order->items as $item) {
+            if ($item->quantity >= 2) {
+                $discount += $item->unit_price * floor($item->quantity / 2);
             }
         }
         return $discount;
     }
 }
 
-
 // NEW discount type - just add new class, no modification needed ✅
 class FirstOrderDiscount implements DiscountStrategy
 {
     public function calculate(Order $order): float
     {
-        if ($order-&gt;customer-&gt;orders()-&gt;count() === 1) {
-            return $order-&gt;subtotal * 0.20;
+        if ($order->customer->orders()->count() === 1) {
+            return $order->subtotal * 0.20;
         }
         return 0;
     }
 }
-
 
 // Usage
 class DiscountService
 {
     public function applyDiscount(Order $order, DiscountStrategy $strategy): void
     {
-        $discount = $strategy-&gt;calculate($order);
-        $order-&gt;discount = $discount;
-        $order-&gt;total = $order-&gt;subtotal - $discount;
+        $discount = $strategy->calculate($order);
+        $order->discount = $discount;
+        $order->total = $order->subtotal - $discount;
     }
 }
 
-
 // Easy to add new discounts without modifying existing code
 $service = new DiscountService();
-$service-&gt;applyDiscount($order, new PercentageDiscount(10));
-$service-&gt;applyDiscount($order, new FixedAmountDiscount(50));
-$service-&gt;applyDiscount($order, new BuyOneGetOneDiscount());
-$service-&gt;applyDiscount($order, new FirstOrderDiscount());
+$service->applyDiscount($order, new PercentageDiscount(10));
+$service->applyDiscount($order, new FixedAmountDiscount(50));
+$service->applyDiscount($order, new BuyOneGetOneDiscount());
+$service->applyDiscount($order, new FirstOrderDiscount());
+</code></pre></div>
 
-
-3.3 Liskov Substitution Principle (LSP)
-
-
-&lt;?php
+<div class="spacer"></div>
+<h3>3.3 Liskov Substitution Principle (LSP)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // Subtypes must be substitutable for their base types
-
 
 // ✅ GOOD - Proper substitution
 interface PaymentMethod
@@ -22132,52 +22169,46 @@ class CreditCardPayment implements PaymentMethod
     public function charge(float $amount): PaymentResult
     {
         // Credit card charging logic
-        return new PaymentResult(true, &#x27;txn_123&#x27;);
+        return new PaymentResult(true, 'txn_123');
     }
-
 
     public function refund(float $amount): RefundResult
     {
         // Credit card refund logic
-        return new RefundResult(true, &#x27;ref_123&#x27;);
+        return new RefundResult(true, 'ref_123');
     }
 }
-
 
 class PayPalPayment implements PaymentMethod
 {
     public function charge(float $amount): PaymentResult
     {
         // PayPal charging logic
-        return new PaymentResult(true, &#x27;pp_123&#x27;);
+        return new PaymentResult(true, 'pp_123');
     }
-
 
     public function refund(float $amount): RefundResult
     {
         // PayPal refund logic
-        return new RefundResult(true, &#x27;pp_ref_123&#x27;);
+        return new RefundResult(true, 'pp_ref_123');
     }
 }
-
 
 // ❌ BAD - Violates LSP
 class CashOnDeliveryPayment implements PaymentMethod
 {
     public function charge(float $amount): PaymentResult
     {
-        // Can&#x27;t charge cash on delivery upfront!
-        throw new \Exception(&#x27;Cannot charge COD payment&#x27;);
+        // Can't charge cash on delivery upfront!
+        throw new \Exception('Cannot charge COD payment');
     }
-
 
     public function refund(float $amount): RefundResult
     {
-        // How do you refund cash that wasn&#x27;t charged?
-        throw new \Exception(&#x27;Cannot refund COD payment&#x27;);
+        // How do you refund cash that wasn't charged?
+        throw new \Exception('Cannot refund COD payment');
     }
 }
-
 
 // ✅ BETTER - Separate interfaces for different behaviors
 interface OnlinePaymentMethod
@@ -22186,13 +22217,11 @@ interface OnlinePaymentMethod
     public function refund(float $amount): RefundResult;
 }
 
-
 interface OfflinePaymentMethod
 {
     public function markAsPaid(float $amount): void;
     public function confirmDelivery(): void;
 }
-
 
 class CashOnDelivery implements OfflinePaymentMethod
 {
@@ -22201,20 +22230,17 @@ class CashOnDelivery implements OfflinePaymentMethod
         // Mark order as paid when delivered
     }
 
-
     public function confirmDelivery(): void
     {
         // Delivery person confirms
     }
 }
+</code></pre></div>
 
-
-3.4 Interface Segregation Principle (ISP)
-
-
-&lt;?php
-// Clients should not be forced to depend on interfaces they don&#x27;t use
-
+<div class="spacer"></div>
+<h3>3.4 Interface Segregation Principle (ISP)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// Clients should not be forced to depend on interfaces they don't use
 
 // ❌ BAD - Fat interface
 interface Worker
@@ -22226,8 +22252,7 @@ interface Worker
     public function attendMeeting(): void;
 }
 
-
-// Robot doesn&#x27;t eat or sleep but forced to implement
+// Robot doesn't eat or sleep but forced to implement
 class Robot implements Worker
 {
     public function work(): void { /* Work */ }
@@ -22244,24 +22269,20 @@ interface Workable
     public function work(): void;
 }
 
-
 interface Eatable
 {
     public function eat(): void;
 }
-
 
 interface Sleepable
 {
     public function sleep(): void;
 }
 
-
 interface Payable
 {
     public function getSalary(): float;
 }
-
 
 // Human implements what makes sense
 class Human implements Workable, Eatable, Sleepable, Payable
@@ -22272,13 +22293,11 @@ class Human implements Workable, Eatable, Sleepable, Payable
     public function getSalary(): float { return 5000; }
 }
 
-
 // Robot only implements what makes sense
 class Robot implements Workable
 {
     public function work(): void { /* Work 24/7 */ }
 }
-
 
 // E-commerce example
 // ❌ BAD
@@ -22292,16 +22311,14 @@ interface Product
     public function getBatteryLife(): int;
 }
 
-
-// Digital product doesn&#x27;t have weight, color, size
+// Digital product doesn't have weight, color, size
 class EBook implements Product
 {
     public function getWeight(): float { return 0; /* ??? */ }
-    public function getColor(): string { return &#x27;&#x27;; /* ??? */ }
-    public function getSize(): string { return &#x27;&#x27;; /* ??? */ }
+    public function getColor(): string { return ''; /* ??? */ }
+    public function getSize(): string { return ''; /* ??? */ }
     public function getBatteryLife(): int { return 0; /* ??? */ }
 }
-
 
 // ✅ GOOD
 interface BaseProduct
@@ -22310,13 +22327,11 @@ interface BaseProduct
     public function getPrice(): float;
 }
 
-
 interface PhysicalProduct extends BaseProduct
 {
     public function getWeight(): float;
     public function getDimensions(): array;
 }
-
 
 interface ClothingProduct extends PhysicalProduct
 {
@@ -22324,13 +22339,11 @@ interface ClothingProduct extends PhysicalProduct
     public function getSize(): string;
 }
 
-
 interface ElectronicProduct extends PhysicalProduct
 {
     public function getBatteryLife(): int;
     public function getWarranty(): int;
 }
-
 
 interface DigitalProduct extends BaseProduct
 {
@@ -22338,50 +22351,43 @@ interface DigitalProduct extends BaseProduct
     public function getFormat(): string;
 }
 
-
 // Now each product only implements what it needs
 class EBook implements DigitalProduct
 {
     public function getName(): string { /* */ }
     public function getPrice(): float { /* */ }
     public function getFileSize(): int { /* */ }
-    public function getFormat(): string { return &#x27;PDF&#x27;; }
+    public function getFormat(): string { return 'PDF'; }
 }
-
 
 class Laptop implements ElectronicProduct
 {
     // Only implements relevant methods
 }
+</code></pre></div>
 
-
-3.5 Dependency Inversion Principle (DIP)
-
-
-&lt;?php
+<div class="spacer"></div>
+<h3>3.5 Dependency Inversion Principle (DIP)</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // Depend on abstractions, not concretions
-
 
 // ❌ BAD - High-level module depends on low-level module
 class OrderService
 {
     private MySQLOrderRepository $repository; // Concrete dependency
 
-
     public function __construct()
     {
-        $this-&gt;repository = new MySQLOrderRepository(); // Tightly coupled
+        $this->repository = new MySQLOrderRepository(); // Tightly coupled
     }
-
 
     public function createOrder(array $data): Order
     {
-        return $this-&gt;repository-&gt;save($data);
+        return $this->repository->save($data);
     }
 }
 
-
-// Can&#x27;t switch to PostgreSQL or MongoDB without changing OrderService ❌
+// Can't switch to PostgreSQL or MongoDB without changing OrderService ❌
 
 
 // ✅ GOOD - Depend on abstraction
@@ -22392,7 +22398,6 @@ interface OrderRepositoryInterface
     public function all(): array;
 }
 
-
 // Concrete implementations
 class MySQLOrderRepository implements OrderRepositoryInterface
 {
@@ -22401,19 +22406,16 @@ class MySQLOrderRepository implements OrderRepositoryInterface
         // MySQL specific logic
     }
 
-
     public function find(int $id): ?Order
     {
         return Order::find($id);
     }
 
-
     public function all(): array
     {
-        return Order::all()-&gt;toArray();
+        return Order::all()->toArray();
     }
 }
-
 
 class MongoDBOrderRepository implements OrderRepositoryInterface
 {
@@ -22422,19 +22424,16 @@ class MongoDBOrderRepository implements OrderRepositoryInterface
         // MongoDB specific logic
     }
 
-
     public function find(int $id): ?Order
     {
         // MongoDB query
     }
-
 
     public function all(): array
     {
         // MongoDB query
     }
 }
-
 
 // High-level module depends on abstraction
 class OrderService
@@ -22443,13 +22442,11 @@ class OrderService
         private OrderRepositoryInterface $repository // Abstract dependency
     ) {}
 
-
     public function createOrder(array $data): Order
     {
-        return $this-&gt;repository-&gt;save($data);
+        return $this->repository->save($data);
     }
 }
-
 
 // Dependency injection in service provider
 class AppServiceProvider extends ServiceProvider
@@ -22457,7 +22454,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Easy to switch implementations
-        $this-&gt;app-&gt;bind(
+        $this->app->bind(
             OrderRepositoryInterface::class,
             MySQLOrderRepository::class
             // or MongoDBOrderRepository::class
@@ -22465,73 +22462,633 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 
-
 // Now can easily switch database without touching OrderService ✅
-4. REPOSITORY PATTERN
-4.1 What is Repository Pattern?
-  
+</code></pre></div>
 
-**5. SERVICE LAYER PATTERN** 
-**5.1 What is Service Layer?**
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>4. REPOSITORY PATTERN</h1>
+<h2>4.1 What is Repository Pattern?</h2>
+<div class="spacer"></div>
 
+<p><strong>Repository Pattern</strong> separates data access logic from business logic, providing a clean abstraction layer between the application and data storage.</p>
 
-6. OBSERVER PATTERN
-6.1 Laravel Events &amp; Listeners (Observer Pattern)
-php
-&lt;?php
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                    REPOSITORY PATTERN                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Controller ─────► Service ─────► Repository ─────► DB          │
+│                                       │                          │
+│                                       ├──► Cache                 │
+│                                       └──► External API          │
+│                                                                  │
+│  Benefits:                                                       │
+│  • Separates data access logic                                   │
+│  • Easy to switch data sources                                   │
+│  • Testable (can mock repositories)                              │
+│  • Centralized data access logic                                 │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Repository Pattern Implementation</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// Step 1: Define Repository Interface
+namespace App\Repositories\Contracts;
+
+interface ProductRepositoryInterface
+{
+    public function find(int $id): ?Product;
+    public function all(): Collection;
+    public function create(array $data): Product;
+    public function update(int $id, array $data): bool;
+    public function delete(int $id): bool;
+    public function findBySlug(string $slug): ?Product;
+    public function getActiveProducts(): Collection;
+}
+
+// Step 2: Implement Repository
+namespace App\Repositories;
+
+use App\Models\Product;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+
+class ProductRepository implements ProductRepositoryInterface
+{
+    public function find(int $id): ?Product
+    {
+        // Cache first, then DB
+        return Cache::remember("product:{$id}", 3600, function() use ($id) {
+            return Product::with(['category', 'images', 'variants'])
+                ->find($id);
+        });
+    }
+
+    public function all(): Collection
+    {
+        return Product::with(['category', 'vendor'])->get();
+    }
+
+    public function create(array $data): Product
+    {
+        $product = Product::create($data);
+        
+        // Clear cache
+        Cache::tags('products')->flush();
+        
+        return $product;
+    }
+
+    public function update(int $id, array $data): bool
+    {
+        $result = Product::where('id', $id)->update($data);
+        
+        // Clear cache
+        Cache::forget("product:{$id}");
+        
+        return $result;
+    }
+
+    public function delete(int $id): bool
+    {
+        $result = Product::destroy($id);
+        
+        // Clear cache
+        Cache::forget("product:{$id}");
+        
+        return $result > 0;
+    }
+
+    public function findBySlug(string $slug): ?Product
+    {
+        return Cache::remember("product:slug:{$slug}", 3600, function() use ($slug) {
+            return Product::where('slug', $slug)
+                ->with(['category', 'images', 'variants'])
+                ->first();
+        });
+    }
+
+    public function getActiveProducts(): Collection
+    {
+        return Product::where('status', 'active')
+            ->where('stock_quantity', '>', 0)
+            ->with(['category', 'vendor'])
+            ->get();
+    }
+}
+
+// Step 3: Use in Service
+namespace App\Services;
+
+use App\Repositories\Contracts\ProductRepositoryInterface;
+
+class ProductService
+{
+    public function __construct(
+        private ProductRepositoryInterface $productRepository
+    ) {}
+
+    public function getProductDetails(int $id): array
+    {
+        $product = $this->productRepository->find($id);
+        
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
+        // Business logic here
+        $discountedPrice = $this->calculateDiscountedPrice($product);
+        $availability = $this->checkAvailability($product);
+
+        return [
+            'product' => $product,
+            'discounted_price' => $discountedPrice,
+            'availability' => $availability,
+        ];
+    }
+
+    private function calculateDiscountedPrice(Product $product): float
+    {
+        return $product->sale_price ?? $product->price;
+    }
+
+    private function checkAvailability(Product $product): string
+    {
+        if ($product->stock_quantity > 10) {
+            return 'In Stock';
+        } elseif ($product->stock_quantity > 0) {
+            return 'Limited Stock';
+        } else {
+            return 'Out of Stock';
+        }
+    }
+}
+
+// Step 4: Bind in Service Provider
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\ProductRepository;
+
+class RepositoryServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(
+            ProductRepositoryInterface::class,
+            ProductRepository::class
+        );
+    }
+}
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>5. SERVICE LAYER PATTERN</h1>
+<h2>5.1 What is Service Layer?</h2>
+<div class="spacer"></div>
+
+<p><strong>Service Layer Pattern</strong> handles business logic, coordinates between multiple repositories, manages transactions, and provides a clean API for controllers.</p>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                    SERVICE LAYER PATTERN                         │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Controller ─────► Service ─────► Multiple Repositories          │
+│                        │                                         │
+│                        ├───► ProductRepository                   │
+│                        ├───► OrderRepository                     │
+│                        ├───► PaymentService                      │
+│                        ├───► EmailService                        │
+│                        └───► InventoryService                    │
+│                                                                  │
+│  Service Layer handles:                                          │
+│  • Business logic                                                │
+│  • Coordination between repositories                             │
+│  • Transaction management                                        │
+│  • Complex operations                                            │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Service Layer Example</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+namespace App\Services\Order;
+
+use App\Repositories\Contracts\OrderRepositoryInterface;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\Payment\PaymentService;
+use App\Services\Notification\EmailService;
+use App\Services\Inventory\InventoryService;
+use Illuminate\Support\Facades\DB;
+use App\Events\OrderPlaced;
+
+class OrderService
+{
+    public function __construct(
+        private OrderRepositoryInterface $orderRepository,
+        private ProductRepositoryInterface $productRepository,
+        private PaymentService $paymentService,
+        private EmailService $emailService,
+        private InventoryService $inventoryService
+    ) {}
+
+    public function createOrder(array $orderData): Order
+    {
+        // Start transaction
+        return DB::transaction(function () use ($orderData) {
+            // 1. Validate products and stock
+            $this->validateOrderItems($orderData['items']);
+
+            // 2. Create order
+            $order = $this->orderRepository->create([
+                'user_id' => $orderData['user_id'],
+                'subtotal' => $orderData['subtotal'],
+                'tax' => $orderData['tax'],
+                'shipping' => $orderData['shipping'],
+                'total' => $orderData['total'],
+                'status' => 'pending',
+            ]);
+
+            // 3. Create order items
+            foreach ($orderData['items'] as $item) {
+                $order->items()->create($item);
+            }
+
+            // 4. Process payment
+            $paymentResult = $this->paymentService->process(
+                $order,
+                $orderData['payment_method']
+            );
+
+            if (!$paymentResult->isSuccessful()) {
+                throw new \Exception('Payment failed');
+            }
+
+            // 5. Update inventory
+            $this->inventoryService->decreaseStock($order);
+
+            // 6. Send confirmation email
+            $this->emailService->sendOrderConfirmation($order);
+
+            // 7. Fire event
+            event(new OrderPlaced($order));
+
+            return $order;
+        });
+    }
+
+    private function validateOrderItems(array $items): void
+    {
+        foreach ($items as $item) {
+            $product = $this->productRepository->find($item['product_id']);
+
+            if (!$product) {
+                throw new \Exception("Product not found: {$item['product_id']}");
+            }
+
+            if ($product->stock_quantity < $item['quantity']) {
+                throw new \Exception("Insufficient stock for: {$product->name}");
+            }
+        }
+    }
+}
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Repository Pattern Flow</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// Step 1: Define Repository Interface
+namespace App\Repositories\Contracts;
+
+interface ProductRepositoryInterface
+{
+    public function find(int $id): ?Product;
+    public function all(): Collection;
+    public function create(array $data): Product;
+    public function update(int $id, array $data): bool;
+    public function delete(int $id): bool;
+    public function findBySlug(string $slug): ?Product;
+    public function getActiveProducts(): Collection;
+}
+
+// Step 2: Implement Repository
+namespace App\Repositories;
+
+use App\Models\Product;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+
+class ProductRepository implements ProductRepositoryInterface
+{
+    public function find(int $id): ?Product
+    {
+        // Cache first, then DB
+        return Cache::remember("product:{$id}", 3600, function() use ($id) {
+            return Product::with(['category', 'images', 'variants'])
+                ->find($id);
+        });
+    }
+
+    public function all(): Collection
+    {
+        return Product::with(['category', 'vendor'])->get();
+    }
+
+    public function create(array $data): Product
+    {
+        $product = Product::create($data);
+        
+        // Clear cache
+        Cache::tags('products')->flush();
+        
+        return $product;
+    }
+
+    public function update(int $id, array $data): bool
+    {
+        $result = Product::where('id', $id)->update($data);
+        
+        // Clear cache
+        Cache::forget("product:{$id}");
+        
+        return $result;
+    }
+
+    public function delete(int $id): bool
+    {
+        $result = Product::destroy($id);
+        
+        // Clear cache
+        Cache::forget("product:{$id}");
+        
+        return $result > 0;
+    }
+
+    public function findBySlug(string $slug): ?Product
+    {
+        return Cache::remember("product:slug:{$slug}", 3600, function() use ($slug) {
+            return Product::where('slug', $slug)
+                ->with(['category', 'images', 'variants'])
+                ->first();
+        });
+    }
+
+    public function getActiveProducts(): Collection
+    {
+        return Product::where('status', 'active')
+            ->where('stock_quantity', '>', 0)
+            ->with(['category', 'vendor'])
+            ->get();
+    }
+}
+
+// Step 3: Use in Service
+namespace App\Services;
+
+use App\Repositories\Contracts\ProductRepositoryInterface;
+
+class ProductService
+{
+    public function __construct(
+        private ProductRepositoryInterface $productRepository
+    ) {}
+
+    public function getProductDetails(int $id): array
+    {
+        $product = $this->productRepository->find($id);
+        
+        if (!$product) {
+            throw new \Exception('Product not found');
+        }
+
+        // Business logic here
+        $discountedPrice = $this->calculateDiscountedPrice($product);
+        $availability = $this->checkAvailability($product);
+
+        return [
+            'product' => $product,
+            'discounted_price' => $discountedPrice,
+            'availability' => $availability,
+        ];
+    }
+
+    private function calculateDiscountedPrice(Product $product): float
+    {
+        // Business logic
+        return $product->sale_price ?? $product->price;
+    }
+
+    private function checkAvailability(Product $product): string
+    {
+        if ($product->stock_quantity > 10) {
+            return 'In Stock';
+        } elseif ($product->stock_quantity > 0) {
+            return 'Limited Stock';
+        } else {
+            return 'Out of Stock';
+        }
+    }
+}
+
+// Step 4: Bind in Service Provider
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\ProductRepository;
+
+class RepositoryServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(
+            ProductRepositoryInterface::class,
+            ProductRepository::class
+        );
+    }
+}
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>5. SERVICE LAYER PATTERN</h1>
+<h2>5.1 What is Service Layer?</h2>
+<div class="spacer"></div>
+
+<p><strong>Service Layer Pattern</strong> handles business logic, coordinates between multiple repositories, manages transactions, and provides a clean API for controllers.</p>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌──────────────────────────────────────────────────────────────────┐
+│                    SERVICE LAYER PATTERN                         │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Controller ─────► Service ─────► Multiple Repositories          │
+│                        │                                         │
+│                        ├───► ProductRepository                   │
+│                        ├───► OrderRepository                     │
+│                        ├───► PaymentService                      │
+│                        ├───► EmailService                        │
+│                        └───► InventoryService                    │
+│                                                                  │
+│  Service Layer handles:                                          │
+│  • Business logic                                                │
+│  • Coordination between repositories                             │
+│  • Transaction management                                        │
+│  • Complex operations                                            │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>Service Layer Example</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+namespace App\Services\Order;
+
+use App\Repositories\Contracts\OrderRepositoryInterface;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\Payment\PaymentService;
+use App\Services\Notification\EmailService;
+use App\Services\Inventory\InventoryService;
+use Illuminate\Support\Facades\DB;
+use App\Events\OrderPlaced;
+
+class OrderService
+{
+    public function __construct(
+        private OrderRepositoryInterface $orderRepository,
+        private ProductRepositoryInterface $productRepository,
+        private PaymentService $paymentService,
+        private EmailService $emailService,
+        private InventoryService $inventoryService
+    ) {}
+
+    public function createOrder(array $orderData): Order
+    {
+        // Start transaction
+        return DB::transaction(function () use ($orderData) {
+            // 1. Validate products and stock
+            $this->validateOrderItems($orderData['items']);
+
+            // 2. Create order
+            $order = $this->orderRepository->create([
+                'user_id' => $orderData['user_id'],
+                'subtotal' => $orderData['subtotal'],
+                'tax' => $orderData['tax'],
+                'shipping' => $orderData['shipping'],
+                'total' => $orderData['total'],
+                'status' => 'pending',
+            ]);
+
+            // 3. Create order items
+            foreach ($orderData['items'] as $item) {
+                $order->items()->create($item);
+            }
+
+            // 4. Process payment
+            $paymentResult = $this->paymentService->process(
+                $order,
+                $orderData['payment_method']
+            );
+
+            if (!$paymentResult->isSuccessful()) {
+                throw new \Exception('Payment failed');
+            }
+
+            // 5. Update inventory
+            $this->inventoryService->decreaseStock($order);
+
+            // 6. Send confirmation email
+            $this->emailService->sendOrderConfirmation($order);
+
+            // 7. Fire event
+            event(new OrderPlaced($order));
+
+            return $order;
+        });
+    }
+
+    private function validateOrderItems(array $items): void
+    {
+        foreach ($items as $item) {
+            $product = $this->productRepository->find($item['product_id']);
+
+            if (!$product) {
+                throw new \Exception("Product not found: {$item['product_id']}");
+            }
+
+            if ($product->stock_quantity < $item['quantity']) {
+                throw new \Exception("Insufficient stock for: {$product->name}");
+            }
+        }
+    }
+}
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>6. OBSERVER PATTERN</h1>
+<h2>6.1 Laravel Events & Listeners (Observer Pattern)</h2>
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Events/OrderPlaced.php
 
-
 namespace App\Events;
-
 
 use App\Models\Order;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-
 class OrderPlaced
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     public function __construct(
         public Order $order
     ) {}
 }
-php
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Listeners/SendOrderConfirmationEmail.php
 
-
 namespace App\Listeners;
-
 
 use App\Events\OrderPlaced;
 use App\Mail\OrderConfirmation;
 use Illuminate\Support\Facades\Mail;
 
-
 class SendOrderConfirmationEmail
 {
     public function handle(OrderPlaced $event): void
     {
-        Mail::to($event-&gt;order-&gt;customer-&gt;email)
-            -&gt;send(new OrderConfirmation($event-&gt;order));
+        Mail::to($event->order->customer->email)
+            ->send(new OrderConfirmation($event->order));
     }
 }
-php
-&lt;?php
-// app/Listeners/UpdateInventory.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Listeners/UpdateInventory.php
 
 namespace App\Listeners;
 
-
 use App\Events\OrderPlaced;
 use App\Services\Inventory\InventoryService;
-
 
 class UpdateInventory
 {
@@ -22539,120 +23096,116 @@ class UpdateInventory
         private InventoryService $inventoryService
     ) {}
 
-
     public function handle(OrderPlaced $event): void
     {
-        foreach ($event-&gt;order-&gt;items as $item) {
-            $this-&gt;inventoryService-&gt;decreaseStock(
-                $item-&gt;product_id,
-                $item-&gt;quantity
+        foreach ($event->order->items as $item) {
+            $this->inventoryService->decreaseStock(
+                $item->product_id,
+                $item->quantity
             );
         }
     }
 }
-&lt;?php
-// app/Listeners/CreateCommissionRecords.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Listeners/CreateCommissionRecords.php
 
 namespace App\Listeners;
 
-
 use App\Events\OrderPlaced;
-
 
 class CreateCommissionRecords
 {
     public function handle(OrderPlaced $event): void
     {
-        foreach ($event-&gt;order-&gt;items as $item) {
-            $commissionAmount = $item-&gt;total_price * ($item-&gt;commission_rate / 100);
-            $gatewayFee = $item-&gt;total_price * 0.029 + 0.30;
-            $vendorPayout = $item-&gt;total_price - $commissionAmount - $gatewayFee;
+        foreach ($event->order->items as $item) {
+            $commissionAmount = $item->total_price * ($item->commission_rate / 100);
+            $gatewayFee = $item->total_price * 0.029 + 0.30;
+            $vendorPayout = $item->total_price - $commissionAmount - $gatewayFee;
 
-
-            $event-&gt;order-&gt;commissions()-&gt;create([
-                &#x27;vendor_id&#x27; =&gt; $item-&gt;vendor_id,
-                &#x27;order_item_id&#x27; =&gt; $item-&gt;id,
-                &#x27;order_amount&#x27; =&gt; $item-&gt;total_price,
-                &#x27;commission_rate&#x27; =&gt; $item-&gt;commission_rate,
-                &#x27;commission_amount&#x27; =&gt; $commissionAmount,
-                &#x27;gateway_fee&#x27; =&gt; $gatewayFee,
-                &#x27;vendor_payout&#x27; =&gt; $vendorPayout,
-                &#x27;status&#x27; =&gt; &#x27;pending&#x27;,
+            $event->order->commissions()->create([
+                'vendor_id' => $item->vendor_id,
+                'order_item_id' => $item->id,
+                'order_amount' => $item->total_price,
+                'commission_rate' => $item->commission_rate,
+                'commission_amount' => $commissionAmount,
+                'gateway_fee' => $gatewayFee,
+                'vendor_payout' => $vendorPayout,
+                'status' => 'pending',
             ]);
         }
     }
 }
-6.2 Register Event Listeners
-php
-&lt;?php
-// app/Providers/EventServiceProvider.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>6.2 Register Event Listeners</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Providers/EventServiceProvider.php
 
 namespace App\Providers;
 
-
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-
 
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        \App\Events\OrderPlaced::class =&gt; [
+        \App\Events\OrderPlaced::class => [
             \App\Listeners\SendOrderConfirmationEmail::class,
             \App\Listeners\UpdateInventory::class,
             \App\Listeners\CreateCommissionRecords::class,
             \App\Listeners\NotifyVendor::class,
         ],
 
-
-        \App\Events\OrderShipped::class =&gt; [
+        \App\Events\OrderShipped::class => [
             \App\Listeners\SendShippingNotification::class,
             \App\Listeners\UpdateOrderStatus::class,
         ],
 
-
-        \App\Events\PaymentReceived::class =&gt; [
+        \App\Events\PaymentReceived::class => [
             \App\Listeners\ReleaseCommission::class,
             \App\Listeners\SendPaymentReceipt::class,
         ],
     ];
 }
-6.3 Trigger Event
-php
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>6.3 Trigger Event</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // In OrderService or Controller
 
-
 use App\Events\OrderPlaced;
-
 
 public function createOrder(User $user, array $orderData): Order
 {
     $order = // ... create order logic
 
-
     // Trigger event - all listeners will be executed
     event(new OrderPlaced($order));
 
-
     return $order;
 }
-FACTORY PATTERN
-7.1 Payment Gateway Factory
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>7. FACTORY PATTERN</h1>
+<h2>7.1 Payment Gateway Factory</h2>
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Factories/PaymentGatewayFactory.php
 
-
 namespace App\Factories;
-
 
 use App\Services\Payment\PaymentGatewayInterface;
 use App\Services\Payment\StripePaymentGateway;
 use App\Services\Payment\PayPalPaymentGateway;
 use App\Services\Payment\SSLCommerzGateway;
 use App\Services\Payment\CashOnDeliveryGateway;
-
 
 class PaymentGatewayFactory
 {
@@ -22662,14 +23215,13 @@ class PaymentGatewayFactory
     public static function create(string $paymentMethod): PaymentGatewayInterface
     {
         return match($paymentMethod) {
-            &#x27;stripe_card&#x27; =&gt; app(StripePaymentGateway::class),
-            &#x27;paypal&#x27; =&gt; app(PayPalPaymentGateway::class),
-            &#x27;sslcommerz&#x27; =&gt; app(SSLCommerzGateway::class),
-            &#x27;cash_on_delivery&#x27; =&gt; app(CashOnDeliveryGateway::class),
-            default =&gt; throw new \InvalidArgumentException(&quot;Unsupported payment method: {$paymentMethod}&quot;),
+            'stripe_card' => app(StripePaymentGateway::class),
+            'paypal' => app(PayPalPaymentGateway::class),
+            'sslcommerz' => app(SSLCommerzGateway::class),
+            'cash_on_delivery' => app(CashOnDeliveryGateway::class),
+            default => throw new \InvalidArgumentException("Unsupported payment method: {$paymentMethod}"),
         };
     }
-
 
     /**
      * Get all available payment methods
@@ -22677,80 +23229,77 @@ class PaymentGatewayFactory
     public static function getAvailableMethods(): array
     {
         return [
-            &#x27;stripe_card&#x27; =&gt; [
-                &#x27;name&#x27; =&gt; &#x27;Credit/Debit Card&#x27;,
-                &#x27;description&#x27; =&gt; &#x27;Pay securely with Visa, Mastercard, or American Express&#x27;,
-                &#x27;icon&#x27; =&gt; &#x27;credit-card&#x27;,
-                &#x27;enabled&#x27; =&gt; config(&#x27;services.stripe.enabled&#x27;, true),
+            'stripe_card' => [
+                'name' => 'Credit/Debit Card',
+                'description' => 'Pay securely with Visa, Mastercard, or American Express',
+                'icon' => 'credit-card',
+                'enabled' => config('services.stripe.enabled', true),
             ],
-            &#x27;paypal&#x27; =&gt; [
-                &#x27;name&#x27; =&gt; &#x27;PayPal&#x27;,
-                &#x27;description&#x27; =&gt; &#x27;Pay with your PayPal account&#x27;,
-                &#x27;icon&#x27; =&gt; &#x27;paypal&#x27;,
-                &#x27;enabled&#x27; =&gt; config(&#x27;services.paypal.enabled&#x27;, true),
+            'paypal' => [
+                'name' => 'PayPal',
+                'description' => 'Pay with your PayPal account',
+                'icon' => 'paypal',
+                'enabled' => config('services.paypal.enabled', true),
             ],
-            &#x27;sslcommerz&#x27; =&gt; [
-                &#x27;name&#x27; =&gt; &#x27;Mobile Banking / bKash&#x27;,
-                &#x27;description&#x27; =&gt; &#x27;Pay with bKash, Nagad, Rocket, or card&#x27;,
-                &#x27;icon&#x27; =&gt; &#x27;mobile&#x27;,
-                &#x27;enabled&#x27; =&gt; config(&#x27;services.sslcommerz.enabled&#x27;, true),
+            'sslcommerz' => [
+                'name' => 'Mobile Banking / bKash',
+                'description' => 'Pay with bKash, Nagad, Rocket, or card',
+                'icon' => 'mobile',
+                'enabled' => config('services.sslcommerz.enabled', true),
             ],
-            &#x27;cash_on_delivery&#x27; =&gt; [
-                &#x27;name&#x27; =&gt; &#x27;Cash on Delivery&#x27;,
-                &#x27;description&#x27; =&gt; &#x27;Pay when you receive the product&#x27;,
-                &#x27;icon&#x27; =&gt; &#x27;cash&#x27;,
-                &#x27;enabled&#x27; =&gt; true,
+            'cash_on_delivery' => [
+                'name' => 'Cash on Delivery',
+                'description' => 'Pay when you receive the product',
+                'icon' => 'cash',
+                'enabled' => true,
             ],
         ];
     }
 }
-&lt;?php
-// app/Services/Payment/PaymentService.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>7.2 Payment Service Using Factory</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Services/Payment/PaymentService.php
 
 namespace App\Services\Payment;
 
-
 use App\Models\Order;
 use App\Factories\PaymentGatewayFactory;
-
 
 class PaymentService
 {
     public function processPayment(Order $order): PaymentResult
     {
         // Factory creates the appropriate gateway
-        $gateway = PaymentGatewayFactory::create($order-&gt;payment_method);
-
+        $gateway = PaymentGatewayFactory::create($order->payment_method);
 
         // Process payment
-        $result = $gateway-&gt;charge($order-&gt;total, $order);
-
+        $result = $gateway->charge($order->total, $order);
 
         // Save payment record
-        if ($result-&gt;success) {
-            $order-&gt;payments()-&gt;create([
-                &#x27;amount&#x27; =&gt; $order-&gt;total,
-                &#x27;currency&#x27; =&gt; &#x27;USD&#x27;,
-                &#x27;payment_method&#x27; =&gt; $order-&gt;payment_method,
-                &#x27;transaction_id&#x27; =&gt; $result-&gt;transactionId,
-                &#x27;status&#x27; =&gt; &#x27;paid&#x27;,
+        if ($result->success) {
+            $order->payments()->create([
+                'amount' => $order->total,
+                'currency' => 'USD',
+                'payment_method' => $order->payment_method,
+                'transaction_id' => $result->transactionId,
+                'status' => 'paid',
             ]);
         }
-
 
         return $result;
     }
 }
-7.3 Notification Channel Factory
+</code></pre></div>
 
-
-&lt;?php
+<div class="spacer"></div>
+<h3>7.3 Notification Channel Factory</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Factories/NotificationChannelFactory.php
 
-
 namespace App\Factories;
-
 
 use App\Services\Notification\NotificationChannel;
 use App\Services\Notification\EmailChannel;
@@ -22758,46 +23307,45 @@ use App\Services\Notification\SMSChannel;
 use App\Services\Notification\PushChannel;
 use App\Services\Notification\WhatsAppChannel;
 
-
 class NotificationChannelFactory
 {
     public static function create(string $channel): NotificationChannel
     {
         return match($channel) {
-            &#x27;email&#x27; =&gt; app(EmailChannel::class),
-            &#x27;sms&#x27; =&gt; app(SMSChannel::class),
-            &#x27;push&#x27; =&gt; app(PushChannel::class),
-            &#x27;whatsapp&#x27; =&gt; app(WhatsAppChannel::class),
-            default =&gt; throw new \InvalidArgumentException(&quot;Unknown channel: {$channel}&quot;),
+            'email' => app(EmailChannel::class),
+            'sms' => app(SMSChannel::class),
+            'push' => app(PushChannel::class),
+            'whatsapp' => app(WhatsAppChannel::class),
+            default => throw new \InvalidArgumentException("Unknown channel: {$channel}"),
         };
     }
 
-
     public static function createMultiple(array $channels): array
     {
-        return array_map(fn($channel) =&gt; self::create($channel), $channels);
+        return array_map(fn($channel) => self::create($channel), $channels);
     }
 }
 
-
 // Usage
-$channels = NotificationChannelFactory::createMultiple([&#x27;email&#x27;, &#x27;sms&#x27;, &#x27;push&#x27;]);
-
+$channels = NotificationChannelFactory::createMultiple(['email', 'sms', 'push']);
 
 foreach ($channels as $channel) {
-    $channel-&gt;send($user, $message);
+    $channel->send($user, $message);
 }
-8. STRATEGY PATTERN
-8.1 Shipping Cost Strateg
-&lt;?php
-// app/Strategies/Shipping/ShippingStrategy.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>8. STRATEGY PATTERN</h1>
+<h2>8.1 Shipping Cost Strategy</h2>
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Strategies/Shipping/ShippingStrategy.php
 
 namespace App\Strategies\Shipping;
 
-
 use App\Models\Order;
-
 
 interface ShippingStrategy
 {
@@ -22805,46 +23353,45 @@ interface ShippingStrategy
     public function getName(): string;
     public function getEstimatedDays(): int;
 }
-&lt;?php
-// app/Strategies/Shipping/ExpressShipping.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Strategies/Shipping/ExpressShipping.php
 
 namespace App\Strategies\Shipping;
 
-
 use App\Models\Order;
-
 
 class ExpressShipping implements ShippingStrategy
 {
     public function calculateCost(Order $order): float
     {
-        $weight = $order-&gt;getTotalWeight();
+        $weight = $order->getTotalWeight();
         $baseCost = 15.00;
         $weightCost = $weight * 0.8;
         
         return $baseCost + $weightCost;
     }
 
-
     public function getName(): string
     {
-        return &#x27;Express Shipping&#x27;;
+        return 'Express Shipping';
     }
-
 
     public function getEstimatedDays(): int
     {
         return 2;
     }
 }
-8.2 Shipping Service Using Strategy
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>8.2 Shipping Service Using Strategy</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Services/ShippingService.php
 
-
 namespace App\Services;
-
 
 use App\Models\Order;
 use App\Strategies\Shipping\ShippingStrategy;
@@ -22853,44 +23400,38 @@ use App\Strategies\Shipping\ExpressShipping;
 use App\Strategies\Shipping\OvernightShipping;
 use App\Strategies\Shipping\FreeShipping;
 
-
 class ShippingService
 {
     private ShippingStrategy $strategy;
 
-
     public function __construct(?ShippingStrategy $strategy = null)
     {
-        $this-&gt;strategy = $strategy ?? new StandardShipping();
+        $this->strategy = $strategy ?? new StandardShipping();
     }
-
 
     /**
      * Set shipping strategy
      */
     public function setStrategy(ShippingStrategy $strategy): void
     {
-        $this-&gt;strategy = $strategy;
+        $this->strategy = $strategy;
     }
-
 
     /**
      * Calculate shipping cost using current strategy
      */
     public function calculateShipping(Order $order): array
     {
-        $cost = $this-&gt;strategy-&gt;calculateCost($order);
-        $estimatedDays = $this-&gt;strategy-&gt;getEstimatedDays();
-
+        $cost = $this->strategy->calculateCost($order);
+        $estimatedDays = $this->strategy->getEstimatedDays();
 
         return [
-            &#x27;cost&#x27; =&gt; $cost,
-            &#x27;method&#x27; =&gt; $this-&gt;strategy-&gt;getName(),
-            &#x27;estimated_days&#x27; =&gt; $estimatedDays,
-            &#x27;estimated_delivery&#x27; =&gt; now()-&gt;addDays($estimatedDays),
+            'cost' => $cost,
+            'method' => $this->strategy->getName(),
+            'estimated_days' => $estimatedDays,
+            'estimated_delivery' => now()->addDays($estimatedDays),
         ];
     }
-
 
     /**
      * Get all available shipping options
@@ -22898,84 +23439,74 @@ class ShippingService
     public function getAvailableOptions(Order $order): array
     {
         $strategies = [
-            &#x27;standard&#x27; =&gt; new StandardShipping(),
-            &#x27;express&#x27; =&gt; new ExpressShipping(),
-            &#x27;overnight&#x27; =&gt; new OvernightShipping(),
-            &#x27;free&#x27; =&gt; new FreeShipping(),
+            'standard' => new StandardShipping(),
+            'express' => new ExpressShipping(),
+            'overnight' => new OvernightShipping(),
+            'free' => new FreeShipping(),
         ];
-
 
         $options = [];
 
-
-        foreach ($strategies as $key =&gt; $strategy) {
-            $this-&gt;setStrategy($strategy);
-            $options[$key] = $this-&gt;calculateShipping($order);
+        foreach ($strategies as $key => $strategy) {
+            $this->setStrategy($strategy);
+            $options[$key] = $this->calculateShipping($order);
         }
-
 
         return $options;
     }
 }
-
 
 // Usage in Controller
 class CheckoutController extends Controller
 {
     public function getShippingOptions(Request $request, ShippingService $shippingService)
     {
-        $order = Order::findOrFail($request-&gt;order_id);
+        $order = Order::findOrFail($request->order_id);
         
-        $options = $shippingService-&gt;getAvailableOptions($order);
+        $options = $shippingService->getAvailableOptions($order);
 
-
-        return response()-&gt;json([
-            &#x27;success&#x27; =&gt; true,
-            &#x27;data&#x27; =&gt; $options,
+        return response()->json([
+            'success' => true,
+            'data' => $options,
         ]);
     }
-
 
     public function selectShipping(Request $request, ShippingService $shippingService)
     {
-        $order = Order::findOrFail($request-&gt;order_id);
+        $order = Order::findOrFail($request->order_id);
 
-
-        $strategy = match($request-&gt;shipping_method) {
-            &#x27;express&#x27; =&gt; new ExpressShipping(),
-            &#x27;overnight&#x27; =&gt; new OvernightShipping(),
-            &#x27;free&#x27; =&gt; new FreeShipping(),
-            default =&gt; new StandardShipping(),
+        $strategy = match($request->shipping_method) {
+            'express' => new ExpressShipping(),
+            'overnight' => new OvernightShipping(),
+            'free' => new FreeShipping(),
+            default => new StandardShipping(),
         };
 
+        $shippingService->setStrategy($strategy);
+        $result = $shippingService->calculateShipping($order);
 
-        $shippingService-&gt;setStrategy($strategy);
-        $result = $shippingService-&gt;calculateShipping($order);
-
-
-        $order-&gt;update([
-            &#x27;shipping_method&#x27; =&gt; $request-&gt;shipping_method,
-            &#x27;shipping_charge&#x27; =&gt; $result[&#x27;cost&#x27;],
-            &#x27;estimated_delivery_date&#x27; =&gt; $result[&#x27;estimated_delivery&#x27;],
+        $order->update([
+            'shipping_method' => $request->shipping_method,
+            'shipping_charge' => $result['cost'],
+            'estimated_delivery_date' => $result['estimated_delivery'],
         ]);
 
-
-        return response()-&gt;json([
-            &#x27;success&#x27; =&gt; true,
-            &#x27;data&#x27; =&gt; $result,
+        return response()->json([
+            'success' => true,
+            'data' => $result,
         ]);
     }
 }
-8.3 Discount Strategy Pattern
-&lt;?php
-// app/Strategies/Discount/DiscountStrategy.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<h3>8.3 Discount Strategy Pattern</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Strategies/Discount/DiscountStrategy.php
 
 namespace App\Strategies\Discount;
 
-
 use App\Models\Order;
-
 
 interface DiscountStrategy
 {
@@ -22983,15 +23514,15 @@ interface DiscountStrategy
     public function isApplicable(Order $order): bool;
     public function getDescription(): string;
 }
-&lt;?php
-// app/Strategies/Discount/PercentageDiscount.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Strategies/Discount/PercentageDiscount.php
 
 namespace App\Strategies\Discount;
 
-
 use App\Models\Order;
-
 
 class PercentageDiscount implements DiscountStrategy
 {
@@ -23000,82 +23531,76 @@ class PercentageDiscount implements DiscountStrategy
         private ?float $maxDiscount = null
     ) {}
 
-
     public function calculate(Order $order): float
     {
-        $discount = $order-&gt;subtotal * ($this-&gt;percentage / 100);
+        $discount = $order->subtotal * ($this->percentage / 100);
 
-
-        if ($this-&gt;maxDiscount !== null) {
-            $discount = min($discount, $this-&gt;maxDiscount);
+        if ($this->maxDiscount !== null) {
+            $discount = min($discount, $this->maxDiscount);
         }
-
 
         return $discount;
     }
 
-
     public function isApplicable(Order $order): bool
     {
-        return $order-&gt;subtotal &gt; 0;
+        return $order->subtotal > 0;
     }
-
 
     public function getDescription(): string
     {
-        return &quot;{$this-&gt;percentage}% off&quot;;
+        return "{$this->percentage}% off";
     }
 }
-9. CHAIN OF RESPONSIBILITY PATTERN
-9.1 Order Validation Chain
-&lt;?php
-// app/Validators/OrderValidation/ValidationHandler.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>9. CHAIN OF RESPONSIBILITY PATTERN</h1>
+<h2>9.1 Order Validation Chain</h2>
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Validators/OrderValidation/ValidationHandler.php
 
 namespace App\Validators\OrderValidation;
 
-
 use App\Models\Order;
-
 
 abstract class ValidationHandler
 {
     protected ?ValidationHandler $next = null;
 
-
     public function setNext(ValidationHandler $handler): ValidationHandler
     {
-        $this-&gt;next = $handler;
+        $this->next = $handler;
         return $handler;
     }
 
-
     public function handle(Order $order): bool
     {
-        if ($this-&gt;validate($order)) {
-            if ($this-&gt;next) {
-                return $this-&gt;next-&gt;handle($order);
+        if ($this->validate($order)) {
+            if ($this->next) {
+                return $this->next->handle($order);
             }
             return true;
         }
 
-
         return false;
     }
-
 
     abstract protected function validate(Order $order): bool;
     abstract public function getErrorMessage(): string;
 }
-&lt;?php
-// app/Validators/OrderValidation/StockAvailabilityValidator.php
+</code></pre></div>
 
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
+// app/Validators/OrderValidation/StockAvailabilityValidator.php
 
 namespace App\Validators\OrderValidation;
 
-
 use App\Models\Order;
-
 
 class StockAvailabilityValidator extends ValidationHandler
 {
@@ -23166,16 +23691,17 @@ class PaymentMethodValidator extends ValidationHandler
 
     public function getErrorMessage(): string
     {
-        return &quot;Invalid payment method&quot;;
+        return "Invalid payment method";
     }
 }
-9.2 Using the Validation Chain
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>9.2 Using the Validation Chain</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Services/OrderValidationService.php
 
-
 namespace App\Services;
-
 
 use App\Models\Order;
 use App\Validators\OrderValidation\{
@@ -23185,7 +23711,6 @@ use App\Validators\OrderValidation\{
     PaymentMethodValidator,
     CouponValidator
 };
-
 
 class OrderValidationService
 {
@@ -23201,18 +23726,15 @@ class OrderValidationService
         $paymentValidator = new PaymentMethodValidator();
         $couponValidator = new CouponValidator();
 
-
         // Chain validators
         $stockValidator
-            -&gt;setNext($minAmountValidator)
-            -&gt;setNext($addressValidator)
-            -&gt;setNext($paymentValidator)
-            -&gt;setNext($couponValidator);
-
+            ->setNext($minAmountValidator)
+            ->setNext($addressValidator)
+            ->setNext($paymentValidator)
+            ->setNext($couponValidator);
 
         // Execute validation chain
-        $isValid = $stockValidator-&gt;handle($order);
-
+        $isValid = $stockValidator->handle($order);
 
         if (!$isValid) {
             // Find which validator failed
@@ -23224,62 +23746,57 @@ class OrderValidationService
                 $couponValidator,
             ];
 
-
             foreach ($validators as $validator) {
-                if (!$validator-&gt;handle($order)) {
+                if (!$validator->handle($order)) {
                     return [
-                        &#x27;valid&#x27; =&gt; false,
-                        &#x27;error&#x27; =&gt; $validator-&gt;getErrorMessage(),
+                        'valid' => false,
+                        'error' => $validator->getErrorMessage(),
                     ];
                 }
             }
         }
 
-
-        return [&#x27;valid&#x27; =&gt; true];
+        return ['valid' => true];
     }
 }
-
 
 // Usage in Controller
 class OrderController extends Controller
 {
     public function store(Request $request, OrderValidationService $validator)
     {
-        $order = Order::create($request-&gt;validated());
+        $order = Order::create($request->validated());
 
+        $validation = $validator->validate($order);
 
-        $validation = $validator-&gt;validate($order);
-
-
-        if (!$validation[&#x27;valid&#x27;]) {
-            return response()-&gt;json([
-                &#x27;success&#x27; =&gt; false,
-                &#x27;message&#x27; =&gt; $validation[&#x27;error&#x27;],
+        if (!$validation['valid']) {
+            return response()->json([
+                'success' => false,
+                'message' => $validation['error'],
             ], 422);
         }
-
 
         // Proceed with order creation
         // ...
 
-
-        return response()-&gt;json([
-            &#x27;success&#x27; =&gt; true,
-            &#x27;data&#x27; =&gt; $order,
+        return response()->json([
+            'success' => true,
+            'data' => $order,
         ], 201);
     }
 }
+</code></pre></div>
 
-
-10. FACADE PATTERN
-10.1 Order Processing Facade
-&lt;?php
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>10. FACADE PATTERN</h1>
+<h2>10.1 Order Processing Facade</h2>
+<div class="spacer"></div>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // app/Facades/OrderFacade.php
 
-
 namespace App\Facades;
-
 
 use App\Models\Order;
 use App\Models\User;
@@ -23288,7 +23805,6 @@ use App\Services\PaymentService;
 use App\Services\InventoryService;
 use App\Services\NotificationService;
 use App\Services\OrderValidationService;
-
 
 /**
  * Facade to simplify complex order operations
@@ -23303,7 +23819,6 @@ class OrderFacade
         private OrderValidationService $validationService
     ) {}
 
-
     /**
      * Complete order processing with single method call
      */
@@ -23311,71 +23826,61 @@ class OrderFacade
     {
         try {
             // 1. Validate order
-            $validation = $this-&gt;validationService-&gt;validate(
+            $validation = $this->validationService->validate(
                 new Order($orderData)
             );
 
-
-            if (!$validation[&#x27;valid&#x27;]) {
+            if (!$validation['valid']) {
                 return [
-                    &#x27;success&#x27; =&gt; false,
-                    &#x27;message&#x27; =&gt; $validation[&#x27;error&#x27;],
+                    'success' => false,
+                    'message' => $validation['error'],
                 ];
             }
-
 
             // 2. Create order
-            $order = $this-&gt;orderService-&gt;createOrder($user, $orderData);
-
+            $order = $this->orderService->createOrder($user, $orderData);
 
             // 3. Process payment
-            $paymentResult = $this-&gt;paymentService-&gt;processPayment($order);
+            $paymentResult = $this->paymentService->processPayment($order);
 
-
-            if (!$paymentResult-&gt;success) {
-                $this-&gt;orderService-&gt;cancelOrder($order, &#x27;Payment failed&#x27;);
+            if (!$paymentResult->success) {
+                $this->orderService->cancelOrder($order, 'Payment failed');
                 return [
-                    &#x27;success&#x27; =&gt; false,
-                    &#x27;message&#x27; =&gt; &#x27;Payment processing failed&#x27;,
+                    'success' => false,
+                    'message' => 'Payment processing failed',
                 ];
             }
 
-
             // 4. Update inventory
-            foreach ($order-&gt;items as $item) {
-                $this-&gt;inventoryService-&gt;decreaseStock(
-                    $item-&gt;product_id,
-                    $item-&gt;quantity
+            foreach ($order->items as $item) {
+                $this->inventoryService->decreaseStock(
+                    $item->product_id,
+                    $item->quantity
                 );
             }
 
-
             // 5. Send notifications
-            $this-&gt;notificationService-&gt;sendOrderConfirmation($order);
-            $this-&gt;notificationService-&gt;notifyVendors($order);
-
+            $this->notificationService->sendOrderConfirmation($order);
+            $this->notificationService->notifyVendors($order);
 
             return [
-                &#x27;success&#x27; =&gt; true,
-                &#x27;order&#x27; =&gt; $order,
-                &#x27;message&#x27; =&gt; &#x27;Order placed successfully&#x27;,
+                'success' => true,
+                'order' => $order,
+                'message' => 'Order placed successfully',
             ];
 
-
         } catch (\Exception $e) {
-            \Log::error(&#x27;Order processing failed&#x27;, [
-                &#x27;user_id&#x27; =&gt; $user-&gt;id,
-                &#x27;error&#x27; =&gt; $e-&gt;getMessage(),
+            \Log::error('Order processing failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
             ]);
 
-
             return [
-                &#x27;success&#x27; =&gt; false,
-                &#x27;message&#x27; =&gt; &#x27;Order processing failed&#x27;,
+                'success' => false,
+                'message' => 'Order processing failed',
             ];
         }
     }
-
 
     /**
      * Cancel and refund order
@@ -23384,88 +23889,82 @@ class OrderFacade
     {
         try {
             // 1. Refund payment
-            if ($order-&gt;isPaid()) {
-                $refundResult = $this-&gt;paymentService-&gt;refundPayment($order);
+            if ($order->isPaid()) {
+                $refundResult = $this->paymentService->refundPayment($order);
                 
-                if (!$refundResult-&gt;success) {
+                if (!$refundResult->success) {
                     return [
-                        &#x27;success&#x27; =&gt; false,
-                        &#x27;message&#x27; =&gt; &#x27;Refund failed&#x27;,
+                        'success' => false,
+                        'message' => 'Refund failed',
                     ];
                 }
             }
 
-
             // 2. Cancel order
-            $this-&gt;orderService-&gt;cancelOrder($order, $reason);
-
+            $this->orderService->cancelOrder($order, $reason);
 
             // 3. Restore inventory
-            foreach ($order-&gt;items as $item) {
-                $this-&gt;inventoryService-&gt;increaseStock(
-                    $item-&gt;product_id,
-                    $item-&gt;quantity
+            foreach ($order->items as $item) {
+                $this->inventoryService->increaseStock(
+                    $item->product_id,
+                    $item->quantity
                 );
             }
 
-
             // 4. Notify customer
-            $this-&gt;notificationService-&gt;sendCancellationConfirmation($order);
+            $this->notificationService->sendCancellationConfirmation($order);
 
 
             return [
-                &#x27;success&#x27; =&gt; true,
-                &#x27;message&#x27; =&gt; &#x27;Order cancelled and refunded successfully&#x27;,
+                'success' => true,
+                'message' => 'Order cancelled and refunded successfully',
             ];
-
 
         } catch (\Exception $e) {
             return [
-                &#x27;success&#x27; =&gt; false,
-                &#x27;message&#x27; =&gt; &#x27;Cancellation failed&#x27;,
+                'success' => false,
+                'message' => 'Cancellation failed',
             ];
         }
     }
-
 
     /**
      * Track order status
      */
     public function trackOrder(string $orderNumber): array
     {
-        $order = Order::where(&#x27;order_number&#x27;, $orderNumber)-&gt;first();
-
+        $order = Order::where('order_number', $orderNumber)->first();
 
         if (!$order) {
             return [
-                &#x27;success&#x27; =&gt; false,
-                &#x27;message&#x27; =&gt; &#x27;Order not found&#x27;,
+                'success' => false,
+                'message' => 'Order not found',
             ];
         }
 
-
         return [
-            &#x27;success&#x27; =&gt; true,
-            &#x27;order&#x27; =&gt; [
-                &#x27;order_number&#x27; =&gt; $order-&gt;order_number,
-                &#x27;status&#x27; =&gt; $order-&gt;order_status,
-                &#x27;payment_status&#x27; =&gt; $order-&gt;payment_status,
-                &#x27;created_at&#x27; =&gt; $order-&gt;created_at,
-                &#x27;estimated_delivery&#x27; =&gt; $order-&gt;estimated_delivery_date,
-                &#x27;tracking_number&#x27; =&gt; $order-&gt;tracking_number,
-                &#x27;items_count&#x27; =&gt; $order-&gt;items-&gt;count(),
-                &#x27;total&#x27; =&gt; $order-&gt;total,
+            'success' => true,
+            'order' => [
+                'order_number' => $order->order_number,
+                'status' => $order->order_status,
+                'payment_status' => $order->payment_status,
+                'created_at' => $order->created_at,
+                'estimated_delivery' => $order->estimated_delivery_date,
+                'tracking_number' => $order->tracking_number,
+                'items_count' => $order->items->count(),
+                'total' => $order->total,
             ],
         ];
     }
 }
-10.2 Using the Facade
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<h3>10.2 Using the Facade</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // In Controller - Simple usage
 
-
 use App\Facades\OrderFacade;
-
 
 class CheckoutController extends Controller
 {
@@ -23473,71 +23972,68 @@ class CheckoutController extends Controller
         private OrderFacade $orderFacade
     ) {}
 
-
     public function placeOrder(Request $request)
     {
         // Complex operations hidden behind simple facade
-        $result = $this-&gt;orderFacade-&gt;processOrder(
-            $request-&gt;user(),
-            $request-&gt;validated()
+        $result = $this->orderFacade->processOrder(
+            $request->user(),
+            $request->validated()
         );
 
-
-        if (!$result[&#x27;success&#x27;]) {
-            return response()-&gt;json([
-                &#x27;success&#x27; =&gt; false,
-                &#x27;message&#x27; =&gt; $result[&#x27;message&#x27;],
+        if (!$result['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => $result['message'],
             ], 422);
         }
 
-
-        return response()-&gt;json([
-            &#x27;success&#x27; =&gt; true,
-            &#x27;data&#x27; =&gt; $result[&#x27;order&#x27;],
-            &#x27;message&#x27; =&gt; $result[&#x27;message&#x27;],
+        return response()->json([
+            'success' => true,
+            'data' => $result['order'],
+            'message' => $result['message'],
         ], 201);
     }
-
 
     public function cancelOrder(Request $request, $orderId)
     {
         $order = Order::findOrFail($orderId);
 
-
         // Simple method call handles all complexity
-        $result = $this-&gt;orderFacade-&gt;cancelAndRefund(
+        $result = $this->orderFacade->cancelAndRefund(
             $order,
-            $request-&gt;input(&#x27;reason&#x27;)
+            $request->input('reason')
         );
 
-
-        return response()-&gt;json($result);
+        return response()->json($result);
     }
-
 
     public function trackOrder(Request $request)
     {
-        $result = $this-&gt;orderFacade-&gt;trackOrder(
-            $request-&gt;input(&#x27;order_number&#x27;)
+        $result = $this->orderFacade->trackOrder(
+            $request->input('order_number')
         );
 
-
-        return response()-&gt;json($result);
+        return response()->json($result);
     }
 }
-11.2 Constructor Injection
-&lt;?php
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h1>11. DEPENDENCY INJECTION</h1>
+<h2>11.1 Service Provider Bindings</h2>
+<div class="spacer"></div>
+<h3>11.2 Constructor Injection</h3>
+<div class="code-wrapper"><pre><code class="language-php hljs-custom"><?php
 // Automatic Dependency Resolution
 
-
 namespace App\Http\Controllers\Api\V1;
-
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\CacheService;
 use App\Services\ImageService;
-
 
 class ProductController extends Controller
 {
@@ -23548,24 +24044,36 @@ class ProductController extends Controller
         private ImageService $imageService
     ) {}
 
-
     public function index()
     {
         // Use injected dependencies
-        $products = $this-&gt;productRepository-&gt;all();
-        return response()-&gt;json($products);
+        $products = $this->productRepository->all();
+        return response()->json($products);
     }
 }
-OOP Principles:
-* Encapsulation
-* Inheritance
-* Polymorphism
-* Abstraction
-SOLID Principles:
-* Single Responsibility Principle
-* Open/Closed Principle
-* Liskov Substitution Principle
-* Interface Segregation Principle
+</code></pre></div>
+
+<div class="spacer"></div>
+<hr class="section-rule">
+<div class="spacer"></div>
+<h2>SUMMARY - Design Patterns Used</h2>
+<div class="spacer"></div>
+
+<div class="summary-box">
+<h3>OOP Principles:</h3>
+<ul>
+<li>Encapsulation</li>
+<li>Inheritance</li>
+<li>Polymorphism</li>
+<li>Abstraction</li>
+</ul>
+
+<h3>SOLID Principles:</h3>
+<ul>
+<li>Single Responsibility Principle</li>
+<li>Open/Closed Principle</li>
+<li>Liskov Substitution Principle</li>
+<li>Interface Segregation Principle
 * Dependency Inversion Principle
 Design Patterns:
 * Repository Pattern
