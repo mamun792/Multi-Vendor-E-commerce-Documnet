@@ -23367,13 +23367,175 @@ DESIGN PATTERNS DECISION TREE DIAGRAM</code></pre></div>
   </div>
   <div class="doc-body"><h1>E-COMMERCE PLATFORM</h1>
 <h1>DESIGN PATTERNS DECISION TREE DIAGRAM</h1>
+<p><strong>Visual Decision Tree for Choosing Design Patterns</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌─────────────────────────────────────────────────────────────────┐
+│             START: NEW FEATURE/COMPONENT                        │
+│              What are you building?                             │
+└──────────────────┬──────────────────────────────────────────────┘
+                   │
+        ┌──────────┴──────────┐
+        │                     │
+        ▼                     ▼
+┌───────────────┐     ┌───────────────┐
+│  Data         │     │  Business     │
+│  Access?      │     │  Logic?       │
+└───┬───────┬───┘     └───┬───────┬───┘
+    │       │             │       │
+    ▼       ▼             ▼       ▼
+┌─────┐ ┌─────────┐  ┌────────┐ ┌──────────┐
+│Ext. │ │Database │  │Workflow│ │Algorithm │
+│Serv?│ │Queries? │  │Steps?  │ │Variants? │
+└──┬──┘ └────┬────┘  └───┬────┘ └────┬─────┘
+   │         │            │           │
+   ▼         ▼            ▼           ▼
+┌──────────┐ ┌──────────┐ ┌─────────┐ ┌─────────┐
+│ ADAPTER  │ │REPOSITORY│ │ SERVICE │ │STRATEGY │
+│ PATTERN  │ │ PATTERN  │ │  LAYER  │ │ PATTERN │
+└──────────┘ └──────────┘ └─────────┘ └─────────┘
+</code></pre></div>
 <div class="spacer"></div>
 <h1>DETAILED DECISION TREE WITH QUESTIONS</h1>
-<p>Level 1: Primary Classification</p>
+<p><strong>Level 1: Primary Classification — What Is Your Goal?</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                    ┌───────────────────────┐
+                    │  WHAT IS YOUR GOAL?   │
+                    └───────────┬───────────┘
+                                │
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+              ▼                 ▼                 ▼
+        ┌──────────┐      ┌──────────┐     ┌──────────┐
+        │  Access  │      │  Create  │     │  Handle  │
+        │   Data   │      │ Objects  │     │  Events  │
+        └────┬─────┘      └────┬─────┘     └────┬─────┘
+             │                 │                 │
+             ▼                 ▼                 ▼
+        ┌──────────┐      ┌──────────┐     ┌──────────┐
+        │ GO TO A  │      │ GO TO B  │     │ GO TO C  │
+        └──────────┘      └──────────┘     └──────────┘
+
+BRANCH A: DATA ACCESS PATTERNS
+BRANCH B: OBJECT CREATION PATTERNS  
+BRANCH C: BEHAVIORAL PATTERNS
+</code></pre></div>
 <div class="spacer"></div>
 <h1>BRANCH A: DATA ACCESS PATTERNS</h1>
-<div class="spacer"></div>
+<p><strong>A. DATA ACCESS — Where is the data coming from?</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                  ┌──────────────────────────────────┐
+                  │ A. DATA ACCESS - Where is the   │
+                  │    data coming from?            │
+                  └──────────┬───────────────────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+        ┌──────────┐  ┌───────────┐  ┌──────────┐
+        │ Database │  │ External  │  │ Multiple │
+        │          │  │  API/SDK  │  │ Sources  │
+        └────┬─────┘  └─────┬─────┘  └────┬─────┘
+             │              │              │
+             ▼              ▼              ▼
+      ┌──────────┐    ┌──────────┐  ┌──────────┐
+      │Question  │    │Question  │  │Question  │
+      │   A1:    │    │   A2:    │  │   A3:    │
+      │Will you  │    │Does it   │  │Need unif.│
+      │need to   │    │have      │  │interface │
+      │switch DB │    │incomp.   │  │for all   │
+      │or add    │    │interface?│  │sources?  │
+      │cache?    │    │          │  │          │
+      └────┬─────┘    └─────┬────┘  └────┬─────┘
+           │                │             │
+      YES  │  NO       YES  │  NO    YES  │  NO
+           │                │             │
+           ▼                ▼             ▼
+    ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  ┌─────────┐
+    │  REPOSITORY  │ │   ADAPTER    │ │   FACADE     │  │ Direct  │
+    │   PATTERN    │ │   PATTERN    │ │   PATTERN    │  │  Query  │
+    │              │ │              │ │              │  │  Each   │
+    │ ✓ Cache      │ │ ✓ Translate  │ │ ✓ Simplify   │  └─────────┘
+    │ ✓ Test       │ │ ✓ Unify      │ │ ✓ Combine    │
+    │ ✓ Switch     │ │ ✓ Abstract   │ │ ✓ Abstract   │
+    │              │ │              │ │              │
+    │Use when:     │ │Use when:     │ │Use when:     │
+    │• Complex     │ │• Stripe API  │ │• Multiple    │
+    │  queries     │ │• PayPal API  │ │  APIs        │
+    │• Reusable    │ │• SaS Provid. │ │• Complex     │
+    │  logic       │ │• Search Eng. │ │  flow        │
+    │• Need cache  │ │              │ │• Single      │
+    │• Testing req.│ │Examples:     │ │  entry point │
+    │              │ │StripeAdapter │ │              │
+    │Examples:     │ │Notif.Adapter │ │Examples:     │
+    │Product       │ │Twilio        │ │Payment       │
+    │Repository    │ │Adapter       │ │Facade        │
+    │Order         │ │              │ │SearchFacade  │
+    │Repository    │ │              │ │Notif.Facade  │
+    │User Repos.   │ │              │ │              │
+    └──────────────┘ └──────────────┘ └──────────────┘
+</code></pre></div>
 <h1>BRANCH B: OBJECT CREATION PATTERNS</h1>
+<p><strong>B. OBJECT CREATION — How complex is object creation?</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                  ┌──────────────────────────────────┐
+                  │ B. OBJECT CREATION - How         │
+                  │    complex is object creation?   │
+                  └──────────┬───────────────────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+        ┌──────────┐  ┌───────────┐  ┌──────────┐
+        │ Multiple │  │  Step by  │  │ Dynamic  │
+        │Implement.│  │   Step    │  │ Feature  │
+        │          │  │  Build?   │  │  Add?    │
+        └────┬─────┘  └─────┬─────┘  └────┬─────┘
+             │              │              │
+             ▼              ▼              ▼
+      ┌──────────┐    ┌──────────┐  ┌──────────┐
+      │Question  │    │Question  │  │Question  │
+      │   B1:    │    │   B2:    │  │   B3:    │
+      │Need to   │    │Many opt. │  │Need to   │
+      │select    │    │parameters│  │add feat. │
+      │implement.│    │and       │  │at        │
+      │at        │    │validation│  │runtime?  │
+      │runtime?  │    │          │  │          │
+      └────┬─────┘    └─────┬────┘  └────┬─────┘
+           │                │             │
+      YES  │  NO       YES  │  NO    YES  │  NO
+           │                │             │
+           ▼                ▼             ▼
+    ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  ┌─────────┐
+    │   FACTORY    │ │   BUILDER    │ │  DECORATOR   │  │ Direct  │
+    │   PATTERN    │ │   PATTERN    │ │   PATTERN    │  │  Inher. │
+    │              │ │              │ │              │  └─────────┘
+    │When:         │ │When:         │ │When:         │
+    │• Payment     │ │• Order       │ │• Price calc  │
+    │  Gateway     │ │  Creation    │ │  (tax, disc) │
+    │• Shipping    │ │• Query       │ │• Notif.      │
+    │  Method      │ │  Building    │ │  (log/retry) │
+    │• Report      │ │• Report      │ │• Repository  │
+    │  Format      │ │  Building    │ │  (cache/log) │
+    │• Search Eng. │ │• Email       │ │              │
+    │              │ │  Building    │ │              │
+    │Code:         │ │              │ │Code:         │
+    │$gateway =    │ │Code:         │ │$price = new  │
+    │Factory::     │ │OrderBuilder::│ │BasePrice();  │
+    │  create(     │ │  create()    │ │$price = new  │
+    │  'stripe'    │ │  ->for($user)│ │TaxDecorator( │
+    │  );          │ │  ->addItem() │ │  $price);    │
+    │              │ │  ->addItem() │ │$price = new  │
+    │              │ │  ->shipping()│ │DiscDecorator(│
+    │Switch by     │ │  ->build();  │ │  $price);    │
+    │changing      │ │              │ │$price->      │
+    │config only!  │ │✓ Readable    │ │ calculate(); │
+    │              │ │✓ Fluent      │ │              │
+    │✓ Easy to add │ │✓ Validates   │ │✓ Flexible    │
+    │✓ Runtime sel.│ │✓ Immutable   │ │✓ Composable  │
+    │✓ Centralized │ │  result      │ │✓ Extensible  │
+    │✓ Testable    │ │              │ │✓ No subclass │
+    └──────────────┘ └──────────────┘ └──────────────┘
+</code></pre></div>
 <ul>
 <li>Main Question: &quot;How complex is object creation?&quot;</li>
 <li>Three Branches:</li>
@@ -23401,6 +23563,75 @@ DESIGN PATTERNS DECISION TREE DIAGRAM</code></pre></div>
 </ul>
 <div class="spacer"></div>
 <h1>BRANCH C: BEHAVIORAL PATTERNS</h1>
+<p><strong>C. BEHAVIOR — How do components interact?</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                  ┌──────────────────────────────────┐
+                  │ C. BEHAVIOR - How do components │
+                  │    interact?                     │
+                  └──────────┬───────────────────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ▼              ▼              ▼
+        ┌──────────┐  ┌───────────┐  ┌──────────┐
+        │ Business │  │   Need    │  │ Multiple │
+        │ Workflow?│  │  to Vary  │  │ Handlers?│
+        │          │  │   Algo?   │  │          │
+        └────┬─────┘  └─────┬─────┘  └────┬─────┘
+             │              │              │
+             ▼              ▼              ▼
+      ┌──────────┐    ┌──────────┐  ┌──────────┐
+      │Question  │    │Question  │  │Question  │
+      │   C1:    │    │   C2:    │  │   C3:    │
+      │Complex   │    │Same oper.│  │Need to   │
+      │multi-step│    │different │  │notify    │
+      │workflow  │    │implement │  │multiple  │
+      │with mult.│    │at        │  │parts of  │
+      │services? │    │runtime?  │  │system?   │
+      └────┬─────┘    └─────┬────┘  └────┬─────┘
+           │                │             │
+      YES  │  NO       YES  │  NO    YES  │  NO
+           │                │             │
+           ▼                ▼             ▼
+    ┌──────────────┐ ┌──────────────┐ ┌──────────────┐  ┌─────────┐
+    │ SERVICE      │ │  STRATEGY    │ │  OBSERVER    │  │ Direct  │
+    │ LAYER        │ │  PATTERN     │ │  PATTERN     │  │ Method  │
+    │ PATTERN      │ │              │ │  (Events)    │  │  Call   │
+    │              │ │              │ │              │  └─────────┘
+    │When:         │ │Code:         │ │When:         │
+    │• Order       │ │interface     │ │• Order       │
+    │  Creation    │ │ShippingStrat.│ │  placed      │
+    │• Payment     │ │{ calculate() │ │• Payment OK  │
+    │  Processing  │ │}             │ │• User signup │
+    │• User Reg.   │ │              │ │• Product     │
+    │• Product     │ │Standard      │ │  created     │
+    │  Approval    │ │Shipping      │ │              │
+    │              │ │implements... │ │Listeners:    │
+    │Code:         │ │ExpressShip   │ │• SendEmail   │
+    │OrderService::│ │implements... │ │• UpdateStock │
+    │  createOrder(│ │              │ │• CreateComm. │
+    │  $items,     │ │✓ No if/else  │ │• NotifyVend. │
+    │  $address,   │ │✓ Add without │ │              │
+    │  $payment    │ │  modifying   │ │Code:         │
+    │  )           │ │✓ Runtime swap│ │event(new     │
+    │{             │ │              │ │OrderPlaced(  │
+    │  $order,     │ │Use when:     │ │  $order      │
+    │  $sendEmail, │ │• Payment     │ │));           │
+    │  $sendSMS,   │ │  Processing  │ │              │
+    │  $payment    │ │• Shipping    │ │Listeners:    │
+    │};            │ │  Calculation │ │• SendEmail   │
+    │              │ │• Tax Calc    │ │• UpdateStock │
+    │Controller is │ │• Search      │ │• CreateComm. │
+    │thin, service │ │  Ranking     │ │• NotifyVend. │
+    │handles all   │ │• Discount    │ │              │
+    │complexity    │ │  Rules       │ │✓ Decoupled   │
+    │              │ │              │ │✓ Extensible  │
+    │✓ Reusable    │ │              │ │✓ Async       │
+    │✓ Testable    │ │              │ │✓ Side effects│
+    │✓ Transaction │ │              │ │  separated   │
+    │✓ Events      │ │              │ │              │
+    └──────────────┘ └──────────────┘ └──────────────┘
+</code></pre></div>
 <div class="spacer"></div>
 <ul>
 <li>Main Question: &quot;How do components interact?&quot;</li>
@@ -23429,6 +23660,91 @@ DESIGN PATTERNS DECISION TREE DIAGRAM</code></pre></div>
 </ul>
 <div class="spacer"></div>
 <h1>COMPREHENSIVE FLOWCHART</h1>
+<p><strong>Complete Decision Flow — All Patterns Combined</strong></p>
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+                        ┌──────────────────────┐
+                        │   NEED TO SOLVE?     │
+                        └──────────┬───────────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+                    ▼              ▼              ▼
+              ┌──────────┐   ┌──────────┐   ┌──────────┐
+              │  Access  │   │  Create  │   │  Behave/ │
+              │   Data   │   │ Objects  │   │   Flow   │
+              └────┬─────┘   └────┬─────┘   └────┬─────┘
+                   │              │              │
+                   ▼              ▼              ▼
+            ┌──────────┐    ┌──────────┐   ┌──────────┐
+            │Q: Source │    │Q: Complex│   │Q: Workfl.│
+            │   Type?  │    │ity?      │   │  Steps?  │
+            └──┬───┬───┘    └──┬───┬───┘   └──┬───┬───┘
+               │   │           │   │          │   │
+          ┌────┘   └────┐      │   │     ┌────┘   └────┐
+          ▼             ▼      │   │     ▼             ▼
+      ┌────────┐  ┌─────────┐ │   │ ┌────────┐  ┌────────┐
+      │Database│  │External │ │   │ │Workflow│  │ Simple │
+      └───┬────┘  └────┬────┘ │   │ └───┬────┘  └───┬────┘
+          │            │      │   │     │           │
+          ▼            ▼      │   │     ▼           ▼
+    ┌──────────┐ ┌──────────┐│   │┌─────────┐ ┌─────────┐
+    │REPOSIT.  │ │ ADAPTER  ││   ││SERVICE  │ │ Direct  │
+    │ PATTERN  │ │ PATTERN  ││   ││ LAYER   │ │ Method  │
+    └──────────┘ └──────────┘│   │└─────────┘ └─────────┘
+          │            │      │   │     │           
+          │            │      │   │     │           
+          └────────┬───┴──────┘   │     │           
+                   │              │     │           
+              Need Cache?         │     │           
+                   │              │     │           
+                   ▼              │     │           
+            ┌──────────┐          │     │           
+            │DECORATOR │          │     │           
+            │ PATTERN  │          │     │           
+            └──────────┘          │     │           
+                                  │     │           
+                    ┌─────────────┘     │           
+                    │                   │           
+                    ▼                   ▼           
+              ┌──────────┐        ┌──────────┐     
+              │Multiple  │        │Multiple  │     
+              │  Types?  │        │Handlers? │     
+              └──┬───┬───┘        └──┬───┬───┘     
+                 │   │               │   │         
+            YES  │   │ NO        YES │   │ NO      
+                 │   │               │   │         
+                 ▼   ▼               ▼   ▼         
+            ┌────────┐ ┌────────┐ ┌────────┐ ┌────┐
+            │FACTORY │ │BUILDER │ │OBSERVER│ │Use │
+            │        │ │        │ │        │ │if/ │
+            │PATTERN │ │PATTERN │ │PATTERN │ │else│
+            └───┬────┘ └────────┘ └────────┘ └────┘
+                │                                   
+                │                                   
+          Need Runtime                              
+            Variation?                              
+                │                                   
+                ▼                                   
+          ┌──────────┐                              
+          │STRATEGY  │                              
+          │ PATTERN  │                              
+          └──────────┘                              
+
+
+CROSS-CUTTING CONCERNS (Apply to ALL Categories):
+
+┌─────────────────────────────────────────────────────────────┐
+│ NEED TO...                             → THEN USE...        │
+├─────────────────────────────────────────────────────────────┤
+│ Notify many components?                → OBSERVER PATTERN   │
+│ Need step-by-step validation?         → CHAIN OF RESPONS.  │
+│ Need to simplify complex systems?     → FACADE PATTERN     │
+│ Ensure only one instance?             → SINGLETON (or       │
+│                                          Container)         │
+│ Inject dependencies?                  → DEPENDENCY          │
+│                                          INJECTION          │
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
 <div class="spacer"></div>
 <p>Main Structure:</p>
 <ul>
