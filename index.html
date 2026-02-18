@@ -304,13 +304,369 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
   .tab-btn{padding:0 12px;font-size:12px}
   .tab-text{display:none}
   .main{padding:16px 12px 60px}
+  .toc-sidebar{left:-280px!important}
+  .quick-links,.back-top{display:none!important}
 }
+
+/* ══════════════════════════════════════
+   PROFESSIONAL PRINT STYLES
+   ══════════════════════════════════════ */
 @media print{
-  .topbar,.tab-bar,.search-wrap,.topbar-right{display:none!important}
-  body{background:white;color:black}
-  .doc-panel{display:block!important;page-break-before:always}
-  .doc-body{background:white;color:black;border:none;padding:0}
-  .doc-header{background:#1B3A6B;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* Hide all UI chrome */
+  #prog,.topbar,.tab-bar,.search-wrap,.topbar-right,.toc-sidebar,
+  .toc-toggle,.theme-toggle,.quick-links,.back-top,
+  .copy-btn,.code-lang,.anchor-link,.search-count{display:none!important}
+  
+  /* Reset body and layout */
+  *{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  
+  body{
+    background:white!important;
+    color:#000!important;
+    font-size:11pt;
+    line-height:1.5;
+    margin:0!important;
+    padding:0!important;
+  }
+  
+  /* Show all tabs as sequential content */
+  .tab-panel{
+    display:block!important;
+    page-break-before:always;
+    page-break-after:auto;
+    margin:0;
+    padding:0;
+  }
+  
+  /* First tab no page break before */
+  .tab-panel:first-of-type{
+    page-break-before:auto;
+  }
+  
+  /* Main container */
+  .main{
+    max-width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  
+  /* Document header - always print colored */
+  .doc-header{
+    background:#1B3A6B!important;
+    color:white!important;
+    border:none!important;
+    border-radius:0!important;
+    padding:24px 30px!important;
+    margin:0 0 20px 0!important;
+    page-break-after:avoid;
+    page-break-inside:avoid;
+  }
+  
+  .doc-icon{
+    font-size:28px;
+  }
+  
+  .doc-title{
+    color:#F0D080!important;
+    font-size:20pt;
+    font-weight:700;
+  }
+  
+  .doc-meta{
+    color:rgba(255,255,255,0.8)!important;
+    font-size:10pt;
+  }
+  
+  /* Document body */
+  .doc-body{
+    background:white!important;
+    color:#000!important;
+    border:none!important;
+    padding:0 30px 30px 30px!important;
+  }
+  
+  /* Expand all collapsible sections */
+  .collapsible-content{
+    max-height:none!important;
+    display:block!important;
+    overflow:visible!important;
+  }
+  
+  .collapse-icon{
+    display:none!important;
+  }
+  
+  /* Headings - print with colors */
+  .doc-body h1{
+    background:#1B3A6B!important;
+    color:white!important;
+    font-size:16pt;
+    font-weight:700;
+    padding:10px 16px!important;
+    margin:24px 0 12px 0!important;
+    page-break-after:avoid;
+    page-break-inside:avoid;
+    border:none!important;
+  }
+  
+  .doc-body h2{
+    color:#1B3A6B!important;
+    font-size:14pt;
+    font-weight:700;
+    border-left:4px solid #C9A84C!important;
+    padding-left:12px!important;
+    margin:20px 0 10px 0!important;
+    page-break-after:avoid;
+    page-break-inside:avoid;
+  }
+  
+  .doc-body h3{
+    color:#2E4060!important;
+    font-size:12pt;
+    font-weight:600;
+    margin:16px 0 8px 0!important;
+    page-break-after:avoid;
+  }
+  
+  .doc-body h4{
+    color:#495057!important;
+    font-size:11pt;
+    font-weight:600;
+    margin:12px 0 6px 0!important;
+    page-break-after:avoid;
+  }
+  
+  /* Paragraphs and lists */
+  .doc-body p{
+    font-size:10.5pt;
+    line-height:1.6;
+    color:#1a1a1a!important;
+    margin-bottom:8pt;
+    orphans:3;
+    widows:3;
+  }
+  
+  .doc-body ul,.doc-body ol{
+    margin:8pt 0 12pt 20pt!important;
+    page-break-inside:avoid;
+  }
+  
+  .doc-body li{
+    font-size:10.5pt;
+    line-height:1.6;
+    color:#1a1a1a!important;
+    margin-bottom:4pt;
+  }
+  
+  .doc-body strong,.doc-body b{
+    color:#000!important;
+    font-weight:700;
+  }
+  
+  /* Code blocks */
+  .code-wrapper,
+  .doc-body pre{
+    background:#f8f9fa!important;
+    border:1px solid #dee2e6!important;
+    border-left:4px solid #C9A84C!important;
+    border-radius:4px;
+    padding:12pt!important;
+    margin:10pt 0!important;
+    font-size:9pt;
+    line-height:1.4;
+    overflow:visible!important;
+    white-space:pre-wrap!important;
+    word-wrap:break-word!important;
+    page-break-inside:avoid;
+  }
+  
+  .doc-body pre code{
+    font-family:"Courier New",Courier,monospace;
+    font-size:9pt;
+    color:#212529!important;
+    background:none!important;
+    border:none!important;
+    padding:0!important;
+    white-space:pre-wrap!important;
+    word-wrap:break-word!important;
+  }
+  
+  /* Syntax highlighting for print */
+  .hljs-keyword{color:#9c27b0!important}
+  .hljs-string{color:#22863a!important}
+  .hljs-comment{color:#6a737d!important}
+  .hljs-number{color:#005cc5!important}
+  .hljs-function{color:#6f42c1!important}
+  
+  /* Inline code */
+  .inline-code{
+    background:#f6f8fa!important;
+    border:1px solid #e1e4e8!important;
+    color:#24292e!important;
+    font-family:"Courier New",monospace;
+    font-size:9pt;
+    padding:1pt 4pt;
+    border-radius:3px;
+  }
+  
+  /* kbd elements */
+  kbd{
+    background:#f4f4f4!important;
+    border:1px solid #ccc!important;
+    color:#333!important;
+    font-family:"Courier New",monospace;
+    font-size:9pt;
+    padding:1pt 5pt;
+    border-radius:3px;
+  }
+  
+  /* Tables */
+  .table-wrap{
+    overflow:visible!important;
+    border:1px solid #dee2e6!important;
+    border-radius:0;
+    margin:10pt 0!important;
+    page-break-inside:auto;
+  }
+  
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:9pt;
+    page-break-inside:auto;
+  }
+  
+  thead{
+    display:table-header-group;
+  }
+  
+  tbody{
+    display:table-row-group;
+  }
+  
+  tr{
+    page-break-inside:avoid;
+    page-break-after:auto;
+  }
+  
+  th{
+    background:#f8f9fa!important;
+    color:#1B3A6B!important;
+    font-weight:700;
+    padding:8pt 10pt!important;
+    text-align:left;
+    border:1px solid #dee2e6!important;
+  }
+  
+  td{
+    padding:6pt 10pt!important;
+    border:1px solid #dee2e6!important;
+    color:#1a1a1a!important;
+    vertical-align:top;
+  }
+  
+  /* Requirement cards */
+  .req-card{
+    background:#f8f9fa!important;
+    border:1px solid #dee2e6!important;
+    border-left:4px solid #C9A84C!important;
+    border-radius:4px;
+    padding:8pt 12pt!important;
+    margin:8pt 0!important;
+    page-break-inside:avoid;
+  }
+  
+  .req-badge{
+    background:#fff3cd!important;
+    border:1px solid #ffc107!important;
+    color:#856404!important;
+    font-size:8pt;
+    font-weight:700;
+    padding:2pt 6pt!important;
+    border-radius:3px;
+  }
+  
+  .req-desc{
+    color:#1a1a1a!important;
+    font-size:10pt;
+    line-height:1.5;
+  }
+  
+  /* HR and spacers */
+  hr.section-rule{
+    border:none!important;
+    border-top:1px solid #dee2e6!important;
+    margin:16pt 0!important;
+  }
+  
+  .spacer{
+    height:8pt;
+    display:block;
+  }
+  
+  /* Search highlights - keep for print */
+  mark{
+    background:yellow!important;
+    color:#000!important;
+  }
+  
+  /* Images */
+  img{
+    max-width:100%!important;
+    page-break-inside:avoid;
+  }
+  
+  /* Links - show URLs for external only */
+  a[href^="http"]:after{
+    content:" (" attr(href) ")";
+    font-size:8pt;
+    color:#666!important;
+    word-wrap:break-word;
+  }
+  
+  a[href^="#"]:after{
+    content:"";
+  }
+  
+  /* Footer for each page */
+  @page{
+    size:A4;
+    margin:2cm 1.5cm 2.5cm 1.5cm;
+  }
+  
+  /* Page footer */
+  @page{
+    @bottom-center{
+      content:"Multi-Vendor E-commerce Platform Documentation";
+      font-size:9pt;
+      color:#666!important;
+    }
+  }
+  
+  /* Avoid orphans and widows */
+  p,li{
+    orphans:3;
+    widows:3;
+  }
+  
+  /* Blockquotes */
+  blockquote{
+    border-left:4px solid #C9A84C!important;
+    padding-left:12pt!important;
+    margin:10pt 0!important;
+    color:#495057!important;
+    font-style:italic;
+    page-break-inside:avoid;
+  }
+  
+  /* Diagrams and charts */
+  .diagram,.chart{
+    page-break-inside:avoid;
+    margin:10pt 0!important;
+  }
 }
 </style>
 </head>
@@ -39011,8 +39367,10 @@ document.getElementById('copyAllBtn').onclick = () => {
   alert('📋 Link copied to clipboard!');
 };
 
+// Print functionality with auto-expand
 document.getElementById('printBtn').onclick = () => window.print();
 
+// Expand all collapsible sections
 document.getElementById('expandAllBtn').onclick = () => {
   document.querySelectorAll('.collapsible-content').forEach(c => {
     c.classList.remove('collapsed');
@@ -39020,6 +39378,41 @@ document.getElementById('expandAllBtn').onclick = () => {
   });
   document.querySelectorAll('.collapse-icon').forEach(i => i.classList.add('open'));
 };
+
+// Handle beforeprint event - expand all sections and show all tabs
+window.addEventListener('beforeprint', () => {
+  // Expand all collapsible sections
+  document.querySelectorAll('.collapsible-content').forEach(c => {
+    c.classList.remove('collapsed');
+    c.style.maxHeight = 'none';
+    c.style.display = 'block';
+  });
+  
+  // Open all collapse icons
+  document.querySelectorAll('.collapse-icon').forEach(i => i.classList.add('open'));
+  
+  // Make all tab panels visible for printing
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.style.display = 'block';
+  });
+  
+  // Store the current active tab to restore later
+  window._printActiveTab = document.querySelector('.tab-btn.active')?.getAttribute('data-tab');
+});
+
+// Handle afterprint event - restore state
+window.addEventListener('afterprint', () => {
+  // Restore tab visibility
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.style.display = 'none';
+  });
+  
+  // Show only the active tab
+  if (window._printActiveTab) {
+    const activePanel = document.getElementById(window._printActiveTab);
+    if (activePanel) activePanel.style.display = 'block';
+  }
+});
 
 // ══════════════════════════════════════
 // BACK TO TOP
