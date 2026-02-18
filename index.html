@@ -51,6 +51,7 @@ body{
 .topbar-logo{display:flex;flex-direction:column}
 .topbar-title{font-size:15px;font-weight:700;color:var(--gold);letter-spacing:.4px}
 .topbar-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+.topbar-author{font-size:11px;color:var(--text-muted);margin-left:8px;white-space:nowrap}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .topbar-badge{
   background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);
@@ -121,6 +122,21 @@ body{
   padding:10px 18px;border-radius:5px;margin:32px 0 14px;
   letter-spacing:.3px;
 }
+
+/* ── SRS cover (custom) ── */
+.srs-cover{display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px 0 6px}
+.srs-cover-banner{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-dark) 100%);color:#fff;padding:18px 28px;border-radius:6px;box-shadow:0 4px 18px rgba(2,6,23,.35);min-width:560px;max-width:980px;text-align:center}
+.srs-cover-banner h1{margin:0;font-size:22px;letter-spacing:1px;text-transform:uppercase}
+.srs-cover-banner .srs-subtitle{margin-top:8px;font-size:14px;color:rgba(255,255,255,.85);font-weight:600}
+.srs-cover-meta{color:var(--text);text-align:center;margin-top:6px}
+.srs-cover-meta p{margin:4px 0;font-size:13px;color:var(--text);opacity:.95}
+.revision-table .table-wrap{max-width:920px;margin:10px auto;border-radius:6px}
+.revision-table table{background:transparent}
+.revision-table thead th{background:var(--navy);color:var(--gold);font-weight:700}
+.revision-table tbody td{color:var(--text);font-size:13px}
+.revision-table tbody tr td:first-child{font-weight:700;color:var(--gold-light)}
+.revision-table tbody tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
 .doc-body h2{
   font-size:15px;font-weight:700;color:var(--gold);
   border-left:4px solid var(--gold);padding-left:12px;
@@ -688,6 +704,7 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
     <button class="toc-toggle" id="tocToggle" title="Table of Contents (Ctrl+B)">☰</button>
     <button class="theme-toggle" id="themeToggle" title="Toggle Theme (Ctrl+T)">🌙</button>
     <div class="topbar-badge">📄 v2.0 &nbsp;|&nbsp; Feb 2026</div>
+    <div class="topbar-author">Designed by <strong>Mahabubur Rahman (DD)</strong> — Junior Software Engineer</div>
   </div>
 </div>
 
@@ -722,24 +739,44 @@ body.light-theme{background:#f5f5f5;color:#1a1a1a}
       <div class="doc-meta">Multi-Vendor E-commerce Platform &nbsp;·&nbsp; Feb 2026 &nbsp;·&nbsp; v2.0</div>
     </div>
   </div>
-  <div class="doc-body"><h1>SOFTWARE REQUIREMENTS SPECIFICATION (SRS)</h1>
-<p>Multi-Vendor E-commerce Platform</p>
-<p>Document Version: 2.0 (Revised &amp; Complete)</p>
-<p>Date: February 6, 2026</p>
-<p>Status: Final - Ready for Development</p>
-<h1>DOCUMENT REVISION HISTORY</h1>
-<p>Version</p>
-<p>Date</p>
-<p>Author</p>
-<p>Description</p>
-<p>1.0</p>
-<p>January 15, 2026</p>
-<p>Project Team</p>
-<p>Initial draft</p>
-<p>2.0</p>
-<p>February 6, 2026</p>
-<p>System Architect</p>
-<p>Complete revision addressing all identified gaps</p>
+  <div class="doc-body">
+    <section class="srs-cover" role="region" aria-label="SRS cover">
+      <div class="srs-cover-banner">
+        <h1>SOFTWARE REQUIREMENTS SPECIFICATION (SRS)</h1>
+        <div class="srs-subtitle">Multi-Vendor E-commerce Platform</div>
+      </div>
+      <div class="srs-cover-meta">
+        <p><strong>Document Version:</strong> 2.0 (Revised &amp; Complete)</p>
+        <p><strong>Date:</strong> February 6, 2026</p>
+        <p><strong>Status:</strong> Final — Ready for Development</p>
+      </div>
+      <div class="table-wrap revision-table" role="table" aria-label="Document revision history">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Date</th>
+              <th>Author</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1.0</td>
+              <td>January 15, 2026</td>
+              <td>Project Team</td>
+              <td>Initial draft</td>
+            </tr>
+            <tr>
+              <td>2.0</td>
+              <td>February 6, 2026</td>
+              <td>System Architect</td>
+              <td>Complete revision addressing all identified gaps</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 <hr class="section-rule">
 <div class="spacer"></div>
 <h1>TABLE OF CONTENTS</h1>
@@ -39370,14 +39407,39 @@ document.getElementById('copyAllBtn').onclick = () => {
 // Print functionality with auto-expand
 document.getElementById('printBtn').onclick = () => window.print();
 
-// Expand all collapsible sections
-document.getElementById('expandAllBtn').onclick = () => {
-  document.querySelectorAll('.collapsible-content').forEach(c => {
-    c.classList.remove('collapsed');
-    c.style.maxHeight = c.scrollHeight + 'px';
+// Expand all collapsible sections (robust)
+const expandAllBtnEl = document.getElementById('expandAllBtn');
+if (expandAllBtnEl) {
+  expandAllBtnEl.addEventListener('click', () => {
+    // Primary targets: collapsible-content blocks
+    const targets = Array.from(document.querySelectorAll('.collapsible-content'));
+    // Fallback: any element carrying 'collapsed' class
+    const fallback = Array.from(document.querySelectorAll('.collapsed')).filter(el => !el.classList.contains('collapse-icon'));
+    // Also expand <details> if present
+    const details = Array.from(document.querySelectorAll('details'));
+    if (targets.length === 0 && fallback.length === 0 && details.length === 0) {
+      // nothing to expand — still provide feedback
+      expandAllBtnEl.classList.add('active');
+      setTimeout(() => expandAllBtnEl.classList.remove('active'), 900);
+      return;
+    }
+    targets.concat(fallback).forEach(c => {
+      c.classList.remove('collapsed');
+      try { c.style.maxHeight = c.scrollHeight ? c.scrollHeight + 'px' : 'none'; } catch(e) { c.style.maxHeight = 'none'; }
+      c.style.display = 'block';
+      c.removeAttribute('hidden');
+      c.setAttribute('aria-hidden', 'false');
+    });
+    details.forEach(d => d.open = true);
+    document.querySelectorAll('.collapse-icon').forEach(i => {
+      i.classList.add('open');
+      i.setAttribute('aria-expanded', 'true');
+    });
+    // Mark as active briefly to indicate action
+    expandAllBtnEl.classList.add('active');
+    setTimeout(() => expandAllBtnEl.classList.remove('active'), 900);
   });
-  document.querySelectorAll('.collapse-icon').forEach(i => i.classList.add('open'));
-};
+}
 
 // Handle beforeprint event - expand all sections and show all tabs
 window.addEventListener('beforeprint', () => {
