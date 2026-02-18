@@ -32529,13 +32529,58 @@ class SearchController extends Controller
 <h1>1. ADMIN PANEL OVERVIEW</h1>
 <h2>1.1 Admin Panel Structure</h2>
 <div class="spacer"></div>
-<p>Responsive Breakpoints:</p>
-<ul>
-<li>Desktop: 1920px, 1440px, 1280px (Standard)</li>
-<li>Laptop: 1024px (Sidebar remains visible)</li>
-<li>Tablet: 768px (Sidebar collapses to hamburger menu)</li>
-<li>Mobile: 375px, 414px (Sidebar full overlay)</li>
-</ul>
+
+<div class="code-wrapper"><pre><code class="language-text hljs-custom">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        ADMIN PANEL LAYOUT                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  HEADER (Fixed, Height: 64px)                                            │
+│  ┌──────────┐  ┌────────────────┐  ┌─────────────┐  ┌──────────────┐  │
+│  │   LOGO   │  │  Search Bar    │  │Notifications│  │  Admin       │  │
+│  │  + Title │  │  (Global)      │  │  (Badge)    │  │  Profile     │  │
+│  └──────────┘  └────────────────┘  └─────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘
+┌───────────────┬─────────────────────────────────────────────────────────┐
+│   SIDEBAR     │                 MAIN CONTENT AREA                        │
+│   (Fixed)     │                                                          │
+│   Width:      │  ┌────────────────────────────────────────────────────┐ │
+│   260px       │  │  BREADCRUMB                                         │ │
+│               │  │  Home > Products > All Products                     │ │
+│  Dashboard    │  └────────────────────────────────────────────────────┘ │
+│  Products     │  ┌────────────────────────────────────────────────────┐ │
+│  Orders       │  │  PAGE HEADER                                        │ │
+│  Customers    │  │  ┌──────────────┐  ┌──────────────────────────┐  │ │
+│  Vendors      │  │  │  Page Title  │  │  Action Buttons          │  │ │
+│  Categories   │  │  │  + Count     │  │  [+ Add New] [Export]    │  │ │
+│  Reviews      │  │  └──────────────┘  └──────────────────────────┘  │ │
+│  Coupons      │  └────────────────────────────────────────────────────┘ │
+│  Reports      │  ┌────────────────────────────────────────────────────┐ │
+│  Settings     │  │  FILTERS & SEARCH                                   │ │
+│  └─Logout     │  │  [Search] [Status▼] [Category▼] [Date Range]     │ │
+│               │  └────────────────────────────────────────────────────┘ │
+│               │  ┌────────────────────────────────────────────────────┐ │
+│               │  │  DATA TABLE / CONTENT                               │ │
+│   Height:     │  │  ┌─────────────────────────────────────────────┐  │ │
+│   100vh       │  │  │  Table with data rows                       │  │ │
+│               │  │  │  Sortable columns                           │  │ │
+│               │  │  │  Action buttons per row                     │  │ │
+│               │  │  └─────────────────────────────────────────────┘  │ │
+│               │  └────────────────────────────────────────────────────┘ │
+│               │  ┌────────────────────────────────────────────────────┐ │
+│               │  │  PAGINATION                                         │ │
+│               │  │  [◄] [1] [2] [3] ... [10] [►]  Showing 1-20 of 200│ │
+│               │  └────────────────────────────────────────────────────┘ │
+└───────────────┴─────────────────────────────────────────────────────────┘
+
+Responsive Breakpoints:
+- Desktop: 1920px, 1440px, 1280px (Standard)
+- Laptop: 1024px (Sidebar remains visible)
+- Tablet: 768px (Sidebar collapses to hamburger menu)
+- Mobile: 375px, 414px (Sidebar full overlay)
+</code></pre></div>
+
 <div class="spacer"></div>
 <h1>2. PAGE-BY-PAGE DETAILED SPECIFICATION</h1>
 <h2>2.1 DASHBOARD PAGE</h2>
